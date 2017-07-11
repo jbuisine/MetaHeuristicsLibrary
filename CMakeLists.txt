@@ -3,5 +3,5 @@ project(MetaHeuristics)
 
 set(CMAKE_CXX_STANDARD 11)
 
-set(SOURCE_FILES src/main.cpp src/Heuristics.cpp src/Heuristics.h src/Solution.cpp src/Solution.h)
+set(SOURCE_FILES src/main.cpp src/Heuristics.cpp src/Heuristics.h src/solutions/CombinatorySolution.cpp src/solutions/CombinatorySolution.h src/solutions/Solution.cpp src/solutions/Solution.h)
 add_executable(MetaHeuristics ${SOURCE_FILES})

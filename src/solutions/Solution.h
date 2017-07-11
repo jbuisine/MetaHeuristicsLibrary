@@ -1,5 +1,5 @@
 //
-// Created by Jérôme BUISINE on 10/07/2017.
+// Created by Jérôme BUISINE on 11/07/2017.
 //
 
 #ifndef METAHEURISTICS_SOLUTION_H
@@ -11,15 +11,18 @@ using namespace std;
 
 class Solution {
 
-private:
+public:
+
+    vector<int> getArr();
+
+protected:
+
     vector<int> arr;
 
-public:
-    Solution(vector<int> arr);
-    Solution(int size);
+    Solution();
 
-    void switchIndex(int nb);
-    vector<int> getArr();
+    void swapIndex(int nb);
+
 };
 
 

@@ -8,22 +8,34 @@
 
 #include <functional>
 #include <vector>
-#include "Solution.h"
+#include "solutions/CombinatorySolution.h"
+#include "solutions/Solution.h"
 
 using namespace std;
 
 class Heuristics {
 
 private:
-    vector<function<double(Solution)>> funcs;
+    /**
+     * 'false' specify minimizing problem and 'true' maximizing
+     */
+    bool problem_type;
+    vector<function<double(Solution*)>> funcs;
     int s_size;
 
 public:
-    vector<Solution> RandomWalk(int nb_iteration);
-    vector<Solution> HillClimberFirstImprovment(int nb_iteration);
-    vector<Solution> HillClimberBestImprovment(int nb_iteration);
 
-    Heuristics(vector<function<double(Solution)>> f, int s_size);
+    template <class T> vector<Solution> getNeighbors(Solution s);
+
+    vector<Solution> getNonDominatedSols(vector<Solution> sols, vector<function<double(Solution*)>> funcs);
+
+    bool checkSolution(vector<function<double(Solution*)>> funcs, Solution o, Solution n);
+
+    bool checkNeighborsExists(vector<Solution> sols, Solution s);
+
+    template <typename T> Solution* HillClimberBestImprovement(int nb_iteration);
+
+    Heuristics(bool problem_type, vector<function<double(Solution*)>> funcs, int size);
 };
 
 

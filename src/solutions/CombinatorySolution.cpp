@@ -4,14 +4,21 @@
 
 #include <cmath>
 #include <iostream>
-#include "Solution.h"
+#include "CombinatorySolution.h"
 
-Solution::Solution(vector<int> arr) {
+/**
+ * Constructor used for setting arr
+ * @param arr
+ */
+CombinatorySolution::CombinatorySolution(vector<int> arr) : Solution(){
     this->arr = arr;
 }
 
-Solution::Solution(int size) {
-    srand(time(0));
+/**
+ * Constructor used for define a suit of int
+ * @param size
+ */
+CombinatorySolution::CombinatorySolution(int size) : Solution(){
 
     vector<int> v;
     for (int i = 0; i < size; ++i) {
@@ -21,7 +28,12 @@ Solution::Solution(int size) {
     this->arr = v;
 }
 
-void Solution::switchIndex(int nb) {
+/**
+ * Method used for swap element of array randomly
+ * @param nb
+ */
+void CombinatorySolution::swapIndex(int nb) {
+
     for (int i = 0; i < nb; ++i) {
         int first_index = (int) (rand() % (this->arr.size()));
         int second_index = (int) (rand() % (this->arr.size()));
@@ -30,9 +42,5 @@ void Solution::switchIndex(int nb) {
         this->arr[first_index] = this->arr[second_index];
         this->arr[second_index] = old_val;
     }
-}
-
-vector<int> Solution::getArr() {
-    return this->arr;
 }
 
