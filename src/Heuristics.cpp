@@ -2,6 +2,7 @@
 // Created by Jérôme BUISINE on 10/07/2017.
 //
 
+#include <iostream>
 #include "Heuristics.h"
 
 
@@ -24,7 +25,7 @@ bool Heuristics::checkNeighborsExists(vector<Solution> sols, Solution s) {
     return check;
 }
 
-template <class T> vector<Solution> Heuristics::getNeighbors(Solution s) {
+template <typename T> vector<Solution> Heuristics::getNeighbors(Solution s) {
     vector<Solution> sols;
 
     sols.push_back(s);
@@ -58,37 +59,42 @@ bool Heuristics::checkSolution(vector<function<double(Solution*)>> funcs, Soluti
     int counter = 0;
 
     for (int i = 0; i < funcs.size(); ++i) {
+
         if(this->problem_type){
-            if(funcs[i](&n) < funcs[i](&o)) counter ++;
+            if(funcs[i](&n) >= funcs[i](&o)) counter ++;
         }
         else{
-            if(funcs[i](&n) > funcs[i](&o)) counter ++;
+            if(funcs[i](&n) <= funcs[i](&o)) counter ++;
         }
     }
 
     return counter == funcs.size();
 }
 
-template <typename T> Solution* Heuristics::HillClimberBestImprovement(int nb_iteration) {
+//TODO Separate mono objective from multi ?
+template <class T> Solution* Heuristics::HillClimberBestImprovement(int nb_iteration) {
     int nb_eval = 0;
 
     Solution *s = new T(this->s_size);
 
     do{
+
         vector<Solution> neighbors = this->getNeighbors<T>(*s);
 
         for (int i = 0; i < neighbors.size(); ++i) {
 
             if(this->checkSolution(funcs, *s, neighbors[i]))
-                s = &neighbors[i];
+                s = new T(neighbors[i].getArr());
 
             nb_eval++;
 
-            if(nb_iteration >= nb_eval)
+            if(nb_iteration <= nb_eval)
                 break;
         }
 
-    }while (nb_iteration >= nb_eval);
+    }while (nb_iteration > nb_eval);
 
     return s;
 }
+
+template Solution* Heuristics::HillClimberBestImprovement<CombinatorySolution>(int nb_iteration);

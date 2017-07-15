@@ -25,7 +25,7 @@ private:
 
 public:
 
-    template <class T> vector<Solution> getNeighbors(Solution s);
+    template <typename T> vector<Solution> getNeighbors(Solution s);
 
     vector<Solution> getNonDominatedSols(vector<Solution> sols, vector<function<double(Solution*)>> funcs);
 
