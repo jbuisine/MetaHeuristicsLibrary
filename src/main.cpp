@@ -23,10 +23,17 @@ int main() {
 
     f.push_back(compute_obj);
 
-    Heuristics *h = new Heuristics(false, f, 10);
+    Heuristics *h = new Heuristics(false, f, 20);
 
-    Solution* s = h->HillClimberBestImprovement<CombinatorySolution>(1000);
+    Solution* s1 = h->HillClimberBestImprovement<BinaryCombinatorySolution>(50);
+    s1->displaySolution();
+    cout << "Binary combinatory solution : " <<f[0](s1) << endl;
 
-    cout << f[0](s) << endl;
+    cout << endl;
+
+    Solution* s2 = h->HillClimberBestImprovement<CombinatorySolution>(50);
+    s2->displaySolution();
+    cout << "Combinatory solution : " <<f[0](s2) << endl;
+
     return 0;
 }
