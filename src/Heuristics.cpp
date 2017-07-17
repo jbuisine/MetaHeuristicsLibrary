@@ -71,7 +71,13 @@ bool Heuristics::checkSolution(vector<function<double(Solution*)>> funcs, Soluti
     return counter == funcs.size();
 }
 
-//TODO Separate mono objective from multi ?
+/**
+ *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
+ *
+ * @tparam T : Template object Type, subclass of Solution
+ * @param nb_iteration : Number of iteration expected for the HC best improvement
+ * @return Solution object : the best solution found
+ */
 template <class T> Solution* Heuristics::HillClimberBestImprovement(int nb_iteration) {
     int nb_eval = 0;
 
@@ -83,8 +89,10 @@ template <class T> Solution* Heuristics::HillClimberBestImprovement(int nb_itera
 
         for (int i = 0; i < neighbors.size(); ++i) {
 
-            if(this->checkSolution(funcs, *s, neighbors[i]))
+            if(this->checkSolution(funcs, *s, neighbors[i])){
+                delete s;
                 s = new T(neighbors[i].getArr());
+            }
 
             nb_eval++;
 
@@ -97,4 +105,9 @@ template <class T> Solution* Heuristics::HillClimberBestImprovement(int nb_itera
     return s;
 }
 
+/**
+ * Implementation of HC best improvement for combinatory problem solution
+ * @param nb_iteration
+ * @return Solution object : the best solution found
+ */
 template Solution* Heuristics::HillClimberBestImprovement<CombinatorySolution>(int nb_iteration);
