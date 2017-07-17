@@ -10,6 +10,7 @@
 #include <vector>
 #include "solutions/CombinatorySolution.h"
 #include "solutions/Solution.h"
+#include "solutions/BinaryCombinatorySolution.h"
 
 using namespace std;
 
@@ -25,11 +26,9 @@ private:
 
 public:
 
-    template <typename T> vector<Solution> getNeighbors(Solution s);
-
     vector<Solution> getNonDominatedSols(vector<Solution> sols, vector<function<double(Solution*)>> funcs);
 
-    bool checkSolution(vector<function<double(Solution*)>> funcs, Solution o, Solution n);
+    bool checkSolution(Solution o, Solution n);
 
     bool checkNeighborsExists(vector<Solution> sols, Solution s);
 
