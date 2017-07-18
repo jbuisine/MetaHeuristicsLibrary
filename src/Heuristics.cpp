@@ -4,6 +4,7 @@
 
 #include <iostream>
 #include "Heuristics.h"
+#include "Utilities.h"
 
 /**
  * Initialization of context
@@ -17,9 +18,25 @@ Heuristics::Heuristics(bool problem_type, vector<function<double(Solution*)>> f,
     this->problem_type = problem_type;
 }
 
-vector<Solution> Heuristics::getNonDominatedSols(vector<Solution> sols, vector<function<double(Solution*)>> funcs) {
+/**
+ * Method used for getting all non dominated solutions from set of solutions
+ *
+ * @param sols : the set of solutions
+ * @return solutions : new set of non dominated solutions
+ */
+vector<Solution> Heuristics::getNonDominatedSols(vector<Solution> sols) {
 
-    return sols;
+    vector<Solution> solutions;
+
+    for (int i = 0; i < sols.size(); ++i) {
+        for (int j = 0; j < sols.size(); ++j) {
+
+            if(this->checkSolution(sols[i], sols[j]) && !Utilities::checkExists(solutions, sols[i]));
+                solutions.push_back(sols[i]);
+        }
+    }
+
+    return solutions;
 }
 
 /**
@@ -83,3 +100,43 @@ template Solution* Heuristics::HillClimberBestImprovement<CombinatorySolution>(i
 
 template Solution* Heuristics::HillClimberBestImprovement<BinaryCombinatorySolution>(int nb_iteration);
 
+
+/**
+ *  HillClimberFirstImprovement implementation with possibility to use multiple objective or single objective scalarizing method
+ *
+ * @tparam T : Template object Type, subclass of Solution
+ * @param nb_iteration : Number of iteration expected for the HC first improvement
+ * @return Solution object : the best solution found
+ */
+template <class T> Solution* Heuristics::HillClimberFirstImprovement(int nb_iteration) {
+    int nb_eval = 0;
+
+    Solution *s = new T(this->s_size);
+
+    do{
+
+        vector<Solution> neighbors = s->getNeighbors();
+
+        for (int i = 0; i < neighbors.size(); ++i) {
+
+            // Break if new solution is better 
+            if(this->checkSolution(*s, neighbors[i])){
+                delete s;
+                s = new T(neighbors[i].getArr());
+                break;
+            }
+
+            nb_eval++;
+
+            if(nb_iteration <= nb_eval)
+                break;
+        }
+
+    }while (nb_iteration > nb_eval);
+
+    return s;
+}
+
+template Solution* Heuristics::HillClimberBestImprovement<CombinatorySolution>(int nb_iteration);
+
+template Solution* Heuristics::HillClimberBestImprovement<BinaryCombinatorySolution>(int nb_iteration);

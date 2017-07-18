@@ -37,17 +37,6 @@ public:
      * @return vector : all neighbor solutions
      */
     vector<Solution> getNeighbors();
-
-private:
-
-    /**
-    * Method used for check if neighbors solution already exists
-    * @param sols : set of all solutions
-    * @param s : solution to check
-    * @return boolean : True if solution exists, otherwise False
-    */
-    bool checkNeighborsExists(vector<Solution> sols, Solution s);
-
 };
 
 

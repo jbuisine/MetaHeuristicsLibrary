@@ -17,6 +17,8 @@ class Solution {
 public:
 
     /**
+     * TODO check if it's perhaps necessary to pass this attribute type to generic type
+     *
      * Getter of arr attribute
      * @return arr : Solution array
      */

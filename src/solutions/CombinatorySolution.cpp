@@ -5,6 +5,7 @@
 #include <cmath>
 #include <iostream>
 #include "CombinatorySolution.h"
+#include "../Utilities.h"
 
 /**
  * Constructor used for setting arr
@@ -66,31 +67,12 @@ vector<Solution> CombinatorySolution::getNeighbors() {
             newest[j] = old_val;
 
             Solution *n = new CombinatorySolution(newest);
-            if(!this->checkNeighborsExists(sols, *n)) sols.push_back(*n);
+            if(!Utilities::checkExists(sols, *n)) sols.push_back(*n);
         }
     }
 
     sols.erase(sols.begin());
 
     return sols;
-}
-
-/**
- * Method used for check if neighbors solution already exists
- * @param sols : set of all solutions
- * @param s : solution to check
- * @return boolean : True if solution exists, otherwise False
- */
-bool CombinatorySolution::checkNeighborsExists(vector<Solution> sols, Solution s) {
-    bool check = false;
-
-    for (int i = 0; i < sols.size(); ++i) {
-        if(sols[i].getArr() == s.getArr()){
-            check = true;
-            break;
-        }
-    }
-
-    return check;
 }
 
