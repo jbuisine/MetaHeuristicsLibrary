@@ -29,9 +29,16 @@ vector<Solution> Heuristics::getNonDominatedSols(vector<Solution> sols) {
     vector<Solution> solutions;
 
     for (int i = 0; i < sols.size(); ++i) {
+
+        vector<double> scores;
+
+        // Store scores of i solution to avoid redundant compute statements
+        for (int j = 0; j < this->funcs.size(); ++j)
+            scores.push_back(this->funcs[j](&sols[i]));
+
         for (int j = 0; j < sols.size(); ++j) {
 
-            if(this->checkSolution(sols[i], sols[j]) && !Utilities::checkExists(solutions, sols[i]));
+            if(this->checkSolution(scores, sols[j]) && !Utilities::checkExists(solutions, sols[i]));
                 solutions.push_back(sols[i]);
         }
     }
@@ -63,6 +70,29 @@ bool Heuristics::checkSolution(Solution o, Solution n) {
 }
 
 /**
+  * Method which check the solution dominance
+  * @param scores : scores of the older solution
+  * @param n = the new solution
+  * @return True if new solution dominate the older
+  */
+bool Heuristics::checkSolution(vector<double> scores, Solution n){
+
+    int counter = 0;
+
+    for (int i = 0; i < this->funcs.size(); ++i) {
+
+        if(this->problem_type){
+            if(funcs[i](&n) >= scores[i]) counter ++;
+        }
+        else{
+            if(funcs[i](&n) <= scores[i]) counter ++;
+        }
+    }
+
+    return counter == funcs.size();
+}
+
+/**
  *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
  *
  * @tparam T : Template object Type, subclass of Solution
@@ -75,12 +105,18 @@ template <class T> Solution* Heuristics::HillClimberBestImprovement(int nb_itera
     Solution *s = new T(this->s_size);
 
     do{
+        vector<double> scores;
 
+        // Store scores to avoid redundant compute statements
+        for (int j = 0; j < this->funcs.size(); ++j)
+            scores.push_back(this->funcs[j](s));
+
+        // Getting neighbor solutions of s
         vector<Solution> neighbors = s->getNeighbors();
 
         for (int i = 0; i < neighbors.size(); ++i) {
 
-            if(this->checkSolution(*s, neighbors[i])){
+            if(this->checkSolution(scores, neighbors[i])){
                 delete s;
                 s = new T(neighbors[i].getArr());
             }
@@ -114,13 +150,19 @@ template <class T> Solution* Heuristics::HillClimberFirstImprovement(int nb_iter
     Solution *s = new T(this->s_size);
 
     do{
+        vector<double> scores;
 
+        // Store scores to avoid redundant compute statements
+        for (int j = 0; j < this->funcs.size(); ++j)
+            scores.push_back(this->funcs[j](s));
+
+        // Getting neighbor solutions of s
         vector<Solution> neighbors = s->getNeighbors();
 
         for (int i = 0; i < neighbors.size(); ++i) {
 
-            // Break if new solution is better 
-            if(this->checkSolution(*s, neighbors[i])){
+            // Break if new solution is better
+            if(this->checkSolution(scores, neighbors[i])){
                 delete s;
                 s = new T(neighbors[i].getArr());
                 break;
@@ -137,6 +179,6 @@ template <class T> Solution* Heuristics::HillClimberFirstImprovement(int nb_iter
     return s;
 }
 
-template Solution* Heuristics::HillClimberBestImprovement<CombinatorySolution>(int nb_iteration);
+template Solution* Heuristics::HillClimberFirstImprovement<CombinatorySolution>(int nb_iteration);
 
-template Solution* Heuristics::HillClimberBestImprovement<BinaryCombinatorySolution>(int nb_iteration);
+template Solution* Heuristics::HillClimberFirstImprovement<BinaryCombinatorySolution>(int nb_iteration);

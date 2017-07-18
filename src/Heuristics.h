@@ -47,10 +47,18 @@ public:
     /**
      * Method which check the solution dominance
      * @param o : the older solution
-     * @param n = the newest solution
-     * @return
+     * @param n = the new solution
+     * @return True if new solution dominate the older
      */
     bool checkSolution(Solution o, Solution n);
+
+    /**
+     * Method which check the solution dominance
+     * @param scores : scores of the older solution
+     * @param n = the new solution
+     * @return True if new solution dominate the older
+     */
+    bool checkSolution(vector<double> scores, Solution n);
 
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method

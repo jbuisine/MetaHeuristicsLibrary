@@ -25,15 +25,27 @@ int main() {
 
     Heuristics *h = new Heuristics(false, f, 20);
 
-    Solution* s1 = h->HillClimberBestImprovement<BinaryCombinatorySolution>(50);
+    Solution* s1 = h->HillClimberBestImprovement<BinaryCombinatorySolution>(1000);
     s1->displaySolution();
-    cout << "Binary combinatory solution : " <<f[0](s1) << endl;
+    cout << "HC best improvement with Binary combinatory solution : " <<f[0](s1) << endl;
 
     cout << endl;
 
-    Solution* s2 = h->HillClimberBestImprovement<CombinatorySolution>(50);
+    Solution* s2 = h->HillClimberBestImprovement<CombinatorySolution>(1000);
     s2->displaySolution();
-    cout << "Combinatory solution : " <<f[0](s2) << endl;
+    cout << "HC best improvement with Combinatory solution : " <<f[0](s2) << endl;
+
+    cout << endl;
+
+    Solution* s3 = h->HillClimberFirstImprovement<BinaryCombinatorySolution>(1000);
+    s1->displaySolution();
+    cout << "HC first improvement with Binary combinatory solution : " <<f[0](s3) << endl;
+
+    cout << endl;
+
+    Solution* s4 = h->HillClimberFirstImprovement<CombinatorySolution>(1000);
+    s2->displaySolution();
+    cout << "HC first improvement with Combinatory solution : " <<f[0](s4) << endl;
 
     return 0;
 }
