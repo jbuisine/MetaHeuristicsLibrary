@@ -23,7 +23,7 @@ int main() {
 
     f.push_back(compute_obj);
 
-    Heuristics *h = new Heuristics(false, f, 20);
+    Heuristics *h = new Heuristics(false, f, 100);
 
     Solution* s1 = h->HillClimberBestImprovement<BinaryCombinatorySolution>(1000);
     s1->displaySolution();
@@ -38,14 +38,26 @@ int main() {
     cout << endl;
 
     Solution* s3 = h->HillClimberFirstImprovement<BinaryCombinatorySolution>(1000);
-    s1->displaySolution();
+    s3->displaySolution();
     cout << "HC first improvement with Binary combinatory solution : " <<f[0](s3) << endl;
 
     cout << endl;
 
     Solution* s4 = h->HillClimberFirstImprovement<CombinatorySolution>(1000);
-    s2->displaySolution();
+    s4->displaySolution();
     cout << "HC first improvement with Combinatory solution : " <<f[0](s4) << endl;
+
+    cout << endl;
+
+    Solution* s5 = h->IteratedLocalSearch<BinaryCombinatorySolution>(100, 1000, 2);
+    s5->displaySolution();
+    cout << "Iterated local search with Binary combinatory solution : " <<f[0](s5) << endl;
+
+    cout << endl;
+
+    Solution* s6 = h->IteratedLocalSearch<CombinatorySolution>(100, 1000, 2);
+    s6->displaySolution();
+    cout << "Iterated local search with Combinatory solution : " <<f[0](s6) << endl;
 
     return 0;
 }

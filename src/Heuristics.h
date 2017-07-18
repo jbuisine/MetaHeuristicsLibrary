@@ -67,7 +67,7 @@ public:
      * @param nb_iteration : Number of iteration expected for the HC best improvement
      * @return Solution object : the best solution found
      */
-    template <typename T> Solution* HillClimberBestImprovement(int nb_iteration);
+    template <typename T> Solution* HillClimberBestImprovement(int nb_iteration, Solution *s = NULL);
 
     /**
      *  HillClimberFirstImprovement implementation with possibility to use multiple objective or single objective scalarizing method
@@ -76,7 +76,18 @@ public:
      * @param nb_iteration : Number of iteration expected for the HC first improvement
      * @return Solution object : the best solution found
      */
-    template <typename T> Solution* HillClimberFirstImprovement(int nb_iteration);
+    template <typename T> Solution* HillClimberFirstImprovement(int nb_iteration, Solution *s = NULL);
+
+    /**
+     * Iterated local search implementation
+     *
+     * @tparam T : Template object Type, subclass of Solution
+     * @param nb_iteration : number of iteration for ILS
+     * @param nb_hc_iteration : number of iteration for each HC first improvement
+     * @param perturbation : number of element permute to create new solution
+     * @return the best solution found
+     */
+    template <typename T> Solution* IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation);
 };
 
 

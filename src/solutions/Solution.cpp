@@ -12,6 +12,8 @@ Solution::Solution() {
     srand((unsigned int) time(0));
 }
 
+// TODO need to change to Array of int to increase performance
+
 /**
  * Getter of arr attribute
  * @return arr : Solution array
