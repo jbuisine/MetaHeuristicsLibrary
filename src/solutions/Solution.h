@@ -6,13 +6,14 @@
 #define METAHEURISTICS_SOLUTION_H
 
 #include <vector>
+#include <array>
 
 using namespace std;
 
 /**
  * Solution class : template of solution
  */
-class Solution {
+template<size_t N> class Solution {
 
 public:
 
@@ -22,7 +23,7 @@ public:
      * Getter of arr attribute
      * @return arr : Solution array
      */
-    vector<int> getArr();
+    array<int, N> getArr();
 
     /**
      * Destructor
@@ -41,7 +42,7 @@ public:
      * @param s
      * @return
      */
-    virtual vector<Solution> getNeighbors();
+    virtual vector<Solution<N>> getNeighbors();
 
     /**
      * Method used for display solution
@@ -50,7 +51,7 @@ public:
 
 protected:
 
-    vector<int> arr;
+    array<int, N> arr;
 
     /**
      * Constructor

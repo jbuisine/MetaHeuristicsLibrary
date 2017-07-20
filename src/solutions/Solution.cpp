@@ -5,33 +5,32 @@
 #include <iostream>
 #include "Solution.h"
 
+
 /**
  * Constructor used for creating new solution
  */
-Solution::Solution() {
+template<size_t N> Solution<N>::Solution() {
     srand((unsigned int) time(0));
 }
-
-// TODO need to change to Array of int to increase performance
 
 /**
  * Getter of arr attribute
  * @return arr : Solution array
  */
-vector<int> Solution::getArr() {
+template<size_t N> array<int, N> Solution<N>::getArr() {
     return this->arr;
 }
 
 /**
  * Destructor
  */
-Solution::~Solution() {}
+template<size_t N> Solution<N>::~Solution() {}
 
 /**
  * Method used for swap and permute index values
  * @param nb : number of swap expected
  */
-void Solution::swapIndex(int nb) {};
+template<std::size_t N> void Solution<N>::swapIndex(int nb) {};
 
 /**
 * Method used for getting all neighbors solution of current solution
@@ -39,19 +38,4 @@ void Solution::swapIndex(int nb) {};
 * @param s
 * @return
 */
-vector<Solution> Solution::getNeighbors() {}
-
-/**
- * Method used for display solution
- */
-void Solution::displaySolution() {
-    cout << "[";
-
-    for (int j = 0; j < this->arr.size(); ++j) {
-        if(j != this->arr.size()-1)
-            cout << this->arr[j] << ",";
-        else
-            cout << this->arr[j];
-    }
-    cout << "]" << endl;
-}
+template<size_t N> vector<Solution<N>> Solution<N>::getNeighbors() {}

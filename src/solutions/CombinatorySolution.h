@@ -10,7 +10,7 @@
 
 using namespace std;
 
-class CombinatorySolution : public Solution {
+template<size_t N> class CombinatorySolution : public Solution<N> {
 
 public:
 
@@ -18,13 +18,12 @@ public:
      * Constructor used for setting arr
      * @param arr : array solution
      */
-    CombinatorySolution(vector<int> arr);
+    CombinatorySolution(array<int, N> arr);
 
     /**
      * Constructor used for define a suit of int randomly distributed
-     * @param size : number of element into array solution
      */
-    CombinatorySolution(int size);
+    CombinatorySolution();
 
     /**
      * Method used for swap element of array randomly
@@ -36,7 +35,7 @@ public:
      * Method used for getting all neighbors solutions of the solution
      * @return vector : all neighbor solutions
      */
-    vector<Solution> getNeighbors();
+    vector<Solution<N>> getNeighbors();
 };
 
 

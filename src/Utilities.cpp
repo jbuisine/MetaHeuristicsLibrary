@@ -10,7 +10,7 @@
 * @param s : solution to check
 * @return boolean : True if solution exists, otherwise False
 */
-bool Utilities::checkExists(vector<Solution> sols, Solution s) {
+template<std::size_t N> bool Utilities<N>::checkExists(vector<Solution<N>> sols, Solution<N> s) {
     bool check = false;
 
     for (int i = 0; i < sols.size(); ++i) {

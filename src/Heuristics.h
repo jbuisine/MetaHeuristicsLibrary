@@ -12,9 +12,7 @@
 #include "solutions/Solution.h"
 #include "solutions/BinaryCombinatorySolution.h"
 
-using namespace std;
-
-class Heuristics {
+template<typename T, std::size_t N> class Heuristics {
 
 private:
     /**
@@ -22,7 +20,7 @@ private:
      */
     bool problem_type;
 
-    vector<function<double(Solution*)>> funcs;
+    vector<function<double(T*)>> funcs;
 
     int s_size;
 
@@ -34,7 +32,7 @@ public:
      * @param f : objective function(s)
      * @param s_size : size of problem solution
      */
-    Heuristics(bool problem_type, vector<function<double(Solution*)>> funcs, int size);
+    Heuristics(bool problem_type, vector<function<double(T*)>> funcs, int size);
 
     /**
      * Method used for getting all non dominated solutions from set of solutions
@@ -42,7 +40,7 @@ public:
      * @param sols : the set of solutions
      * @return solutions : new set of non dominated solutions
      */
-    vector<Solution> getNonDominatedSols(vector<Solution> sols);
+    vector<T> getNonDominatedSols(vector<T> sols);
 
     /**
      * Method which check the solution dominance
@@ -50,7 +48,7 @@ public:
      * @param n = the new solution
      * @return True if new solution dominate the older
      */
-    bool checkSolution(Solution o, Solution n);
+    bool checkSolution(T o, T n);
 
     /**
      * Method which check the solution dominance
@@ -58,7 +56,7 @@ public:
      * @param n = the new solution
      * @return True if new solution dominate the older
      */
-    bool checkSolution(vector<double> scores, Solution n);
+    bool checkSolution(vector<double> scores, T n);
 
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
@@ -67,7 +65,7 @@ public:
      * @param nb_iteration : Number of iteration expected for the HC best improvement
      * @return Solution object : the best solution found
      */
-    template <typename T> Solution* HillClimberBestImprovement(int nb_iteration, Solution *s = NULL);
+    T* HillClimberBestImprovement(int nb_iteration, T *s = NULL);
 
     /**
      *  HillClimberFirstImprovement implementation with possibility to use multiple objective or single objective scalarizing method
@@ -76,7 +74,7 @@ public:
      * @param nb_iteration : Number of iteration expected for the HC first improvement
      * @return Solution object : the best solution found
      */
-    template <typename T> Solution* HillClimberFirstImprovement(int nb_iteration, Solution *s = NULL);
+    T* HillClimberFirstImprovement(int nb_iteration, T *s = NULL);
 
     /**
      * Iterated local search implementation
@@ -87,7 +85,7 @@ public:
      * @param perturbation : number of element permute to create new solution
      * @return the best solution found
      */
-    template <typename T> Solution* IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation);
+    T* IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation);
 };
 
 

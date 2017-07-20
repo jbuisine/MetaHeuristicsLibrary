@@ -11,7 +11,7 @@
  * Constructor used for setting arr
  * @param arr : array solution
  */
-CombinatorySolution::CombinatorySolution(vector<int> arr) : Solution(){
+template<size_t N> CombinatorySolution<N>::CombinatorySolution(array<int, N> arr) : Solution<N>(){
     this->arr = arr;
 }
 
@@ -19,12 +19,12 @@ CombinatorySolution::CombinatorySolution(vector<int> arr) : Solution(){
  * Constructor used for define a suit of int randomly distributed
  * @param size : number of element into array solution
  */
-CombinatorySolution::CombinatorySolution(int size) : Solution(){
+template<size_t N> CombinatorySolution<N>::CombinatorySolution() : Solution<N>(){
 
-    vector<int> v;
+    array<int, N> v;
 
-    for (int i = 0; i < size; ++i) {
-        v.push_back(i);
+    for (int i = 0; i < N; ++i) {
+        v[i] = i;
     }
 
     this->arr = v;
@@ -36,7 +36,7 @@ CombinatorySolution::CombinatorySolution(int size) : Solution(){
  * Method used for swap element of array randomly
  * @param nb : number of expected swap
  */
-void CombinatorySolution::swapIndex(int nb) {
+template<size_t N> void CombinatorySolution<N>::swapIndex(int nb) {
 
     for (int i = 0; i < nb; ++i) {
         int first_index = (int) (rand() % (this->arr.size()));
@@ -52,22 +52,22 @@ void CombinatorySolution::swapIndex(int nb) {
  * Method used for getting all neighbors solutions of the solution
  * @return vector : all neighbor solutions
  */
-vector<Solution> CombinatorySolution::getNeighbors() {
-    vector<Solution> sols;
+template<size_t N> vector<Solution<N>> CombinatorySolution<N>::getNeighbors() {
+    vector<Solution<N>> sols;
 
     sols.push_back(*this);
 
     for (int i = 0; i < this->getArr().size(); ++i) {
         for (int j = 0; j < this->getArr().size(); ++j) {
 
-            vector<int> newest = this->getArr();
+            array<int, N> newest = this->getArr();
 
             int old_val = newest[i];
             newest[i] = newest[j];
             newest[j] = old_val;
 
-            Solution *n = new CombinatorySolution(newest);
-            if(!Utilities::checkExists(sols, *n)) sols.push_back(*n);
+            Solution<N> *n = new CombinatorySolution<N>(newest);
+            if(!Utilities<N>::checkExists(sols, *n)) sols.push_back(*n);
         }
     }
 
@@ -76,3 +76,18 @@ vector<Solution> CombinatorySolution::getNeighbors() {
     return sols;
 }
 
+
+/**
+ * Method used for display solution
+ */
+template<size_t N> void Solution<N>::displaySolution() {
+    cout << "[";
+
+    for (int j = 0; j < this->arr.size(); ++j) {
+        if(j != this->arr.size()-1)
+            cout << this->arr[j] << ",";
+        else
+            cout << this->arr[j];
+    }
+    cout << "]" << endl;
+}

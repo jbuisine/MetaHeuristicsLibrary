@@ -10,20 +10,19 @@
  * Constructor used for setting arr
  * @param arr
  */
-BinaryCombinatorySolution::BinaryCombinatorySolution(vector<int> arr) : Solution(){
+template<size_t N> BinaryCombinatorySolution<N>::BinaryCombinatorySolution(array<int, N> arr) : Solution<N>(){
     this->arr = arr;
 }
 
 /**
  * Constructor used for define a suit of random 0 and 1
- * @param size : number of element into array solution
  */
-BinaryCombinatorySolution::BinaryCombinatorySolution(int size) : Solution(){
+template<size_t N> BinaryCombinatorySolution<N>::BinaryCombinatorySolution() : Solution<N>(){
 
-    vector<int> v;
+    array<int, N> v;
 
-    for (int i = 0; i < size; ++i) {
-        v.push_back(0);
+    for (int i = 0; i < N; ++i) {
+        v[i] = 0;
     }
 
     this->arr = v;
@@ -35,7 +34,7 @@ BinaryCombinatorySolution::BinaryCombinatorySolution(int size) : Solution(){
  * Method used for swap element of array randomly
  * @param nb : number of expected swap
  */
-void BinaryCombinatorySolution::swapIndex(int nb) {
+template<size_t N> void BinaryCombinatorySolution<N>::swapIndex(int nb) {
 
     for (int i = 0; i < nb; ++i) {
         int index = (int) (rand() % (this->arr.size()));
@@ -48,18 +47,18 @@ void BinaryCombinatorySolution::swapIndex(int nb) {
  * Method used for getting all neighbors solutions of the solution
  * @return vector : all neighbor solutions
  */
-vector<Solution> BinaryCombinatorySolution::getNeighbors() {
-    vector<Solution> sols;
+template<size_t N> vector<Solution<N>> BinaryCombinatorySolution<N>::getNeighbors() {
+    vector<Solution<N>> sols;
 
     sols.push_back(*this);
 
     for (int i = 0; i < this->getArr().size(); ++i) {
 
-        vector<int> newest = this->getArr();
+        array<int, N> newest = this->getArr();
 
         newest[i] = !(bool)newest[i];
 
-        Solution *n = new BinaryCombinatorySolution(newest);
+        Solution<N> *n = new BinaryCombinatorySolution<N>(newest);
         sols.push_back(*n);
     }
 
