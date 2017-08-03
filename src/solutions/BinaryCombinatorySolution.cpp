@@ -19,8 +19,8 @@ template<typename T, size_t N>  BinaryCombinatorySolution<T, N>::BinaryCombinato
  */
 template<typename T, size_t N>  BinaryCombinatorySolution<T, N>::BinaryCombinatorySolution() : Solution<T, N>(){
 
-    for (int i = 0; i < size; ++i) {
-        arr[i] = 0;
+    for (int i = 0; i < this->size; ++i) {
+        this->arr[i] = 0;
     }
 
     this->swapIndex(1000);
@@ -33,7 +33,7 @@ template<typename T, size_t N>  BinaryCombinatorySolution<T, N>::BinaryCombinato
 template<typename T, size_t N>  void BinaryCombinatorySolution<T, N>::swapIndex(int nb) {
 
     for (int i = 0; i < nb; ++i) {
-        int index = (rand() % size);
+        int index = (rand() % this->size);
 
         this->arr[index] = !(bool)this->arr[index];
     }
@@ -48,10 +48,10 @@ template<typename T, size_t N>  vector<Solution<T, N>> BinaryCombinatorySolution
 
     sols.push_back(*this);
 
-    for (int i = 0; i < size; ++i) {
+    for (int i = 0; i < this->size; ++i) {
 
         // TODO check memory possible issues
-        T newest = arr;
+        T newest = this->arr;
 
         newest[i] = !(bool)newest[i];
 

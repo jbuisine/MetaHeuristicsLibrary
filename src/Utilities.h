@@ -8,7 +8,7 @@
 
 #include "solutions/Solution.h"
 
-template<size_t N> class Utilities {
+template<typename T> class Utilities {
 
 public:
 
@@ -18,7 +18,7 @@ public:
     * @param s : solution to check
     * @return boolean : True if solution exists, otherwise False
     */
-    static bool checkExists(vector<Solution<N>> sols, Solution<N> s);
+    static bool checkExists(vector<T> sols, T s);
 };
 
 

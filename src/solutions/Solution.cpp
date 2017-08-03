@@ -18,9 +18,9 @@ template<typename T, size_t N> Solution<T,N>::Solution() {
  * Getter of arr attribute
  * @return arr : Solution array
  */
-template<typename T, size_t N> T* Solution<T, N>::getArr() {
+/*template<typename T, size_t N> T* Solution<T, N>::getArr() {
     return arr;
-}
+}*/
 
 /**
  * Destructor
@@ -34,9 +34,18 @@ template<typename T, size_t N> Solution<T, N>::~Solution() {}
 template<typename T, size_t N> void Solution<T, N>::swapIndex(int nb) {};
 
 /**
-* Method used for getting all neighbors solution of current solution
-* @tparam T : Template object Type, subclass of Solution
-* @param s
-* @return
-*/
+ * Method used for getting all neighbors solution of current solution
+ * @tparam T : Template object Type, subclass of Solution
+ * @param s
+ * @return
+ */
 template<typename T, size_t N> vector<Solution<T, N>> Solution<T, N>::getNeighbors() {}
+
+/**
+ * Method which returns size of solution
+ *
+ * @return size of arr
+ */
+/*template<typename T, size_t N> int Solution<T, N>::getSize() {
+    return size;
+}*/

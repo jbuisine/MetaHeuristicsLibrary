@@ -23,7 +23,9 @@ public:
      * Getter of arr attribute
      * @return arr : Solution array
      */
-     T* getArr();
+     T* getArr(){
+        return arr;
+    };
 
     /**
      * Destructor
@@ -48,6 +50,15 @@ public:
      * Method used for display solution
      */
     void displaySolution();
+
+    /**
+     * Method which returns size of solution
+     *
+     * @return size of arr
+     */
+    int getSize(){
+        return size;
+    };
 
 protected:
 

@@ -12,7 +12,7 @@
  * @param f : objective function(s)
  * @param s_size : size of problem solution
  */
-template<typename T, size_t N> Heuristics<T, N>::Heuristics(bool problem_type, vector<function<double(T*)>> f, int s_size) {
+template<typename T> Heuristics<T>::Heuristics(bool problem_type, vector<function<double(T*)>> f, int s_size) {
     this->funcs = f;
     this->s_size = s_size;
     this->problem_type = problem_type;
@@ -24,7 +24,7 @@ template<typename T, size_t N> Heuristics<T, N>::Heuristics(bool problem_type, v
  * @param sols : the set of solutions
  * @return solutions : new set of non dominated solutions
  */
-template<typename T, size_t N> vector<T> Heuristics<T, N>::getNonDominatedSols(vector<T> sols) {
+template<typename T> vector<T> Heuristics<T>::getNonDominatedSols(vector<T> sols) {
 
     vector<T> solutions;
 
@@ -38,7 +38,7 @@ template<typename T, size_t N> vector<T> Heuristics<T, N>::getNonDominatedSols(v
 
         for (int j = 0; j < sols.size(); ++j) {
 
-            if(this->checkSolution(scores, sols[j]) && !Utilities<N>::checkExists(solutions, sols[i]))
+            if(this->checkSolution(scores, sols[j]) && !Utilities<T>::checkExists(solutions, sols[i]))
                 solutions.push_back(sols[i]);
         }
     }
@@ -52,7 +52,7 @@ template<typename T, size_t N> vector<T> Heuristics<T, N>::getNonDominatedSols(v
  * @param n = the newest solution
  * @return
  */
-template<typename T, size_t N> bool Heuristics<T, N>::checkSolution(T o, T n) {
+template<typename T> bool Heuristics<T>::checkSolution(T o, T n) {
 
     int counter = 0;
 
@@ -75,7 +75,7 @@ template<typename T, size_t N> bool Heuristics<T, N>::checkSolution(T o, T n) {
   * @param n = the new solution
   * @return True if new solution dominate the older
   */
-template<typename T, size_t N> bool Heuristics<T, N>::checkSolution(vector<double> scores, T n){
+template<typename T> bool Heuristics<T>::checkSolution(vector<double> scores, T n){
 
     int counter = 0;
 
@@ -99,7 +99,7 @@ template<typename T, size_t N> bool Heuristics<T, N>::checkSolution(vector<doubl
  * @param nb_iteration : Number of iteration expected for the HC best improvement
  * @return Solution object : the best solution found
  */
-template<typename T, size_t N> T* Heuristics<T, N>::HillClimberBestImprovement(int nb_iteration, T *s) {
+template<typename T> T* Heuristics<T>::HillClimberBestImprovement(int nb_iteration, T *s) {
     int nb_eval = 0;
 
     T *sol;
@@ -149,7 +149,7 @@ template<typename T, size_t N> T* Heuristics<T, N>::HillClimberBestImprovement(i
  * @param nb_iteration : Number of iteration expected for the HC first improvement
  * @return Solution object : the best solution found
  */
-template<typename T, size_t N> T* Heuristics<T, N>::HillClimberFirstImprovement(int nb_iteration, T *s) {
+template<typename T> T* Heuristics<T>::HillClimberFirstImprovement(int nb_iteration, T *s) {
     int nb_eval = 0;
 
     T *sol;
@@ -202,7 +202,7 @@ template<typename T, size_t N> T* Heuristics<T, N>::HillClimberFirstImprovement(
  * @param perturbation : number of element permute to create new solution
  * @return the best solution found
  */
-template<typename T, size_t N> T* Heuristics<T, N>::IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation) {
+template<typename T> T* Heuristics<T>::IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation) {
     int nb_eval = 0;
 
     T *s = new T(this->s_size);

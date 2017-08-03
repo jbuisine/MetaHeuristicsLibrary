@@ -12,7 +12,7 @@
 #include "solutions/Solution.h"
 #include "solutions/BinaryCombinatorySolution.h"
 
-template<typename T, std::size_t N> class Heuristics {
+template<typename T> class Heuristics {
 
 private:
     /**
