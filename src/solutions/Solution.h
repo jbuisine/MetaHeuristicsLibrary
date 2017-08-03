@@ -13,7 +13,7 @@ using namespace std;
 /**
  * Solution class : template of solution
  */
-template<size_t N> class Solution {
+template<typename T, size_t N> class Solution {
 
 public:
 
@@ -23,7 +23,7 @@ public:
      * Getter of arr attribute
      * @return arr : Solution array
      */
-    array<int, N> getArr();
+     T* getArr();
 
     /**
      * Destructor
@@ -42,7 +42,7 @@ public:
      * @param s
      * @return
      */
-    virtual vector<Solution<N>> getNeighbors();
+    virtual vector<Solution<T,N>> getNeighbors();
 
     /**
      * Method used for display solution
@@ -51,7 +51,7 @@ public:
 
 protected:
 
-    array<int, N> arr;
+    T arr[N];
 
     /**
      * Constructor

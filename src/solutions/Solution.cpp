@@ -9,7 +9,7 @@
 /**
  * Constructor used for creating new solution
  */
-template<size_t N> Solution<N>::Solution() {
+template<typename T, size_t N> Solution<T,N>::Solution() {
     srand((unsigned int) time(0));
 }
 
@@ -17,20 +17,20 @@ template<size_t N> Solution<N>::Solution() {
  * Getter of arr attribute
  * @return arr : Solution array
  */
-template<size_t N> array<int, N> Solution<N>::getArr() {
-    return this->arr;
+template<typename T, size_t N> T* Solution<T, N>::getArr() {
+    return arr;
 }
 
 /**
  * Destructor
  */
-template<size_t N> Solution<N>::~Solution() {}
+template<typename T, size_t N> Solution<T, N>::~Solution() {}
 
 /**
  * Method used for swap and permute index values
  * @param nb : number of swap expected
  */
-template<std::size_t N> void Solution<N>::swapIndex(int nb) {};
+template<typename T, size_t N> void Solution<T, N>::swapIndex(int nb) {};
 
 /**
 * Method used for getting all neighbors solution of current solution
@@ -38,4 +38,4 @@ template<std::size_t N> void Solution<N>::swapIndex(int nb) {};
 * @param s
 * @return
 */
-template<size_t N> vector<Solution<N>> Solution<N>::getNeighbors() {}
+template<typename T, size_t N> vector<Solution<T, N>> Solution<T, N>::getNeighbors() {}
