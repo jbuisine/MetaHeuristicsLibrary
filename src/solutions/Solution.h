@@ -53,6 +53,8 @@ protected:
 
     T arr[N];
 
+    int size;
+
     /**
      * Constructor
      */

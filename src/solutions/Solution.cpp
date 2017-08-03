@@ -11,6 +11,7 @@
  */
 template<typename T, size_t N> Solution<T,N>::Solution() {
     srand((unsigned int) time(0));
+    size = sizeof(arr) / sizeof(T);
 }
 
 /**
