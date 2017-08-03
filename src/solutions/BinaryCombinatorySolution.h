@@ -8,14 +8,14 @@
 #include <vector>
 #include "Solution.h"
 
-template<size_t N> class BinaryCombinatorySolution : public Solution<N>{
+template<typename T, size_t N>  class BinaryCombinatorySolution : public Solution<T, N>{
 
 public:
     /**
      * Constructor used for setting arr
      * @param arr : array solution
      */
-    BinaryCombinatorySolution(array<int, N> arr);
+    BinaryCombinatorySolution(T* arr[]);
 
     /**
      * Constructor used for define a suit of int randomly distributed
@@ -34,7 +34,7 @@ public:
      *
      * @return vector : all neighbor solutions
      */
-    vector<Solution<N>> getNeighbors();
+    vector<Solution<T, N>> getNeighbors();
 };
 
 

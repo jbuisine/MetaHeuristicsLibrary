@@ -18,7 +18,7 @@ public:
      * Constructor used for setting arr
      * @param arr : array solution
      */
-    CombinatorySolution(T* arr[]);
+    CombinatorySolution(T* arr);
 
     /**
      * Constructor used for define a suit of int randomly distributed

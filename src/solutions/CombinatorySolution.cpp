@@ -11,7 +11,7 @@
  * Constructor used for setting arr
  * @param arr : array solution
  */
-template<typename T, size_t N> CombinatorySolution<T, N>::CombinatorySolution(T* arr[]) : Solution<T, N>(){
+template<typename T, size_t N> CombinatorySolution<T, N>::CombinatorySolution(T* arr) : Solution<T, N>(){
     this->arr = arr;
 }
 
@@ -56,7 +56,7 @@ template<typename T, size_t N> vector<Solution<T, N>> CombinatorySolution<T, N>:
     for (int i = 0; i < size; ++i) {
         for (int j = 0; j < size; ++j) {
 
-            T newest = this->getArr();
+            T newest = arr;
 
             int old_val = newest[i];
             newest[i] = newest[j];
