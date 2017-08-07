@@ -6,7 +6,7 @@
 #define METAHEURISTICS_UTILITIES_H
 
 
-#include "solutions/Solution.h"
+#include "solutions/Solution.hpp"
 
 template<typename T> class Utilities {
 

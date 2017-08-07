@@ -1,17 +1,20 @@
-#include <functional>
-#include <iostream>
-#include <math.h>
-#include "Heuristics.h"
+#include "Heuristics.hpp"
+
+#include "solutions/CombinatorySolution.hpp"
+#include "solutions/BinaryCombinatorySolution.hpp"
 
 using namespace std;
 
 const size_t N = 100;
 
-double compute (CombinatorySolution<int, N>* s) {
+double compute (long ptrToParam) {
+
+    CombinatorySolution<int>* s = (CombinatorySolution<int>*)ptrToParam;
 
     double c = 0.0;
 
-    for (int i = 0; i < s->getSize(); ++i) {
+    int t = s->getSize();
+    for (int i = 0; i < t; ++i) {
         c += sqrt(s->getArr()[i])*sqrt(i);
     }
 
@@ -20,18 +23,17 @@ double compute (CombinatorySolution<int, N>* s) {
 
 int main() {
 
-    function<double(CombinatorySolution<int, N>*)> compute_obj = compute;
 
-    vector<function<double(CombinatorySolution<int, N>*)>> f;
+    vector<VoidFunctionLong> f;
+    f.push_back((VoidFunctionLong)compute);
 
-    f.push_back(compute_obj);
+    Heuristics<CombinatorySolution<int>>* h = new Heuristics<CombinatorySolution<int>>(false, f, 100);
 
-    Heuristics<CombinatorySolution<int, N>> *h = new Heuristics<CombinatorySolution<int, N>>(false, f, 100);
-
-    CombinatorySolution<int, N>* s1 = h->HillClimberBestImprovement(1000);
+    CombinatorySolution<int>* s1 = h->HillClimberBestImprovement(1000, true);
     s1->displaySolution();
-    cout << "HC best improvement with Binary combinatory solution : " <<f[0](s1) << endl;
-
+    //long best = f[0](s1);
+    //cout << "HC best improvement with Binary combinatory solution : " << best << endl;
+    delete s1;
     cout << endl;
 
     return 0;
