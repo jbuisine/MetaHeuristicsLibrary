@@ -10,7 +10,6 @@
 #include <time.h>
 
 #include <cmath>
-#include <vector>
 #include <array>
 #include <vector>
 #include <iostream>
@@ -115,7 +114,17 @@ public:
     /**
      * Method used for display solution
      */
-    virtual void displaySolution() = 0;
+    void displaySolution() {
+        cout << "[";
+
+        for (int j = 0; j < this->size; ++j) {
+            if(j != this->size-1)
+                cout << this->arr[j] << ",";
+            else
+                cout << this->arr[j];
+        }
+        cout << "]";
+    }
 
     /**
      * Method which returns size of solution
@@ -131,11 +140,6 @@ protected:
     T* arr;
 
     int size;
-
-    /**
-     * Default empty constructor
-     */
-    Solution(){}
 
     /**
      * Constructor used for creating new solution

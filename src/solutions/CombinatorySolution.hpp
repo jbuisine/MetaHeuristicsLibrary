@@ -16,7 +16,14 @@ public:
      * Constructor used for setting arr
      * @param arr : array solution
      */
-    CombinatorySolution(int s) : Solution<T>(s){}
+    CombinatorySolution(int s) : Solution<T>(s){
+
+        for (int i = 0; i < this->size; ++i) {
+            this->arr[i] = i;
+        }
+
+        this->swapIndex(1000);
+    }
 
     /**
 	* Compy constructor used for setting arr
@@ -48,33 +55,20 @@ public:
 
                 Solution<T> *newest = (Solution<T>*)CombinatorySolution<T>::copy(this);
                 T old_val = newest->getArr(i);
+                T val = newest->getArr(j);
                 newest->setArr(i, newest->getArr(j));
                 newest->setArr(j, old_val);
 
                 if (!this->checkExists(sols, newest))
                     sols->push_back(newest);
+
+                T solsSize = sols->size();
             }
         }
 
         sols->erase(sols->begin());
 
         return sols;
-    }
-
-
-    /**
-     * Method used for display solution
-     */
-    void displaySolution() {
-        cout << "[";
-
-        for (int j = 0; j < this->size; ++j) {
-            if(j != this->size-1)
-                cout << this->arr[j] << ",";
-            else
-                cout << this->arr[j];
-        }
-        cout << "]" << endl;
     }
 };
 

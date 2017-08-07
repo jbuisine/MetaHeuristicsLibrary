@@ -8,6 +8,7 @@
 
 #include "solutions/CombinatorySolution.hpp"
 #include "solutions/BinaryCombinatorySolution.hpp"
+#include "Utilities.hpp"
 
 template<typename C>
 class Heuristics {
@@ -18,7 +19,6 @@ private:
      */
     bool problem_type;
 
-    //vector<function<double(T*)>> funcs;
     vector<VoidFunctionLong> funcs;
 
     int s_size;
@@ -31,7 +31,6 @@ public:
      * @param f : objective function(s)
      * @param s_size : size of problem solution
      */
-    //Heuristics(bool problem_type, vector<function<double(T*)>> funcs, int size);
     Heuristics(bool problem_type, vector<VoidFunctionLong>& funcs, int size) {
         this->funcs = funcs;
         this->s_size = size;
@@ -55,11 +54,11 @@ public:
 
             // Store scores of i solution to avoid redundant compute statements
             for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](&sols[i]));
+                scores.push_back(this->funcs[j](sols[i]));
 
             for (int j = 0; j < sols.size(); ++j) {
 
-                if(this->checkSolution(scores, sols[j]) && !checkExists(solutions, sols[i]))
+                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols[i]))
                     solutions.push_back(sols[i]);
             }
         }
@@ -126,9 +125,6 @@ public:
     C* HillClimberBestImprovement(int nb_iteration, bool useRandomValue) {
         int nb_eval = 0;
         C *sol = new C(this->s_size);
-        if (useRandomValue){
-            sol->fillWithRandomCombatorySolution();
-        }
 
         do{
             vector<double> scores;
@@ -141,12 +137,13 @@ public:
             }
 
             // Getting neighbor solutions of s
-            vector<C>* neighbors = (vector<C>*)sol->getNeighbors();
+            vector<C*>* neighbors = (vector<C*>*)sol->getNeighbors();
+            int neighborsSize = (int)neighbors->size();
 
-            for (unsigned int i = 0; i < neighbors->size(); ++i) {
+            for (int i = 0; i < neighbors->size(); ++i) {
 
-                if(this->checkSolution(scores, &neighbors->at(i))){
-                    sol->copyArr(neighbors->at(i).getArr(), this->s_size);
+                if(this->checkSolution(scores, neighbors->at(i))){
+                    sol->copyArr(neighbors->at(i)->getArr(), this->s_size);
                 }
 
                 nb_eval++;
@@ -184,17 +181,17 @@ public:
 
             // Store scores to avoid redundant compute statements
             for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](sol));
+                scores.push_back(this->funcs[j](*sol));
 
             // Getting neighbor solutions of s
-            vector<C> neighbors = sol->getNeighbors();
+            vector<C*>* neighbors = sol->getNeighbors();
 
-            for (int i = 0; i < neighbors.size(); ++i) {
+            for (int i = 0; i < neighbors->size(); ++i) {
 
                 // Break if new solution is better
-                if(this->checkSolution(scores, neighbors[i])){
+                if(this->checkSolution(scores, neighbors->at(i))) {
                     delete sol;
-                    sol = new C(neighbors[i].getArr());
+                    sol->copyArr(neighbors->at(i)->getArr(), this->s_size);
                     break;
                 }
 

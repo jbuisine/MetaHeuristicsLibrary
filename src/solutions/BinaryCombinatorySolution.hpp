@@ -16,12 +16,7 @@ public:
      * Constructor used for setting arr
      * @param arr : array solution
      */
-    BinaryCombinatorySolution(int s) : Solution<T>(s){}
-
-    /**
-     * Constructor used for define a suit of random 0 and 1
-     */
-    BinaryCombinatorySolution() : Solution<T>(){
+    BinaryCombinatorySolution(int s) : Solution<T>(s){
 
         for (int i = 0; i < this->size; ++i) {
             this->arr[i] = 0;
