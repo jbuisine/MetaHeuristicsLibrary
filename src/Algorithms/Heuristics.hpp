@@ -6,8 +6,8 @@
 #define METAHEURISTICS_HEURISTICS_H
 
 
-#include "solutions/CombinatorySolution.hpp"
-#include "solutions/BinaryCombinatorySolution.hpp"
+#include "../solutions/CombinatorySolution.hpp"
+#include "../solutions/BinaryCombinatorySolution.hpp"
 #include "Utilities.hpp"
 
 template<typename C>
@@ -19,9 +19,9 @@ private:
      */
     bool problem_type;
 
-    vector<VoidFunctionLong> funcs;
+    vector<Fitness> funcs;
 
-    int s_size;
+    int size;
 
 public:
 
@@ -31,9 +31,9 @@ public:
      * @param f : objective function(s)
      * @param s_size : size of problem solution
      */
-    Heuristics(bool problem_type, vector<VoidFunctionLong>& funcs, int size) {
+    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
         this->funcs = funcs;
-        this->s_size = size;
+        this->size = size;
         this->problem_type = problem_type;
     }
 
@@ -120,41 +120,55 @@ public:
      *
      * @tparam T : Template object Type, subclass of Solution
      * @param nb_iteration : Number of iteration expected for the HC best improvement
+     * @param s : C solution type which is used if user want to improve a solution
      * @return Solution object : the best solution found
      */
-    C* HillClimberBestImprovement(int nb_iteration, bool useRandomValue) {
+    C* HillClimberBestImprovement(int nb_iteration, C* s = NULL) {
         int nb_eval = 0;
-        C *sol = new C(this->s_size);
+
+        C *sol;
+
+        // Getting existing solution pass as parameter
+        if(s == NULL)
+            sol = new C(this->size);
+        else
+            sol = s;
 
         do{
             vector<double> scores;
 
             // Store scores to avoid redundant compute statements
             for (unsigned int j = 0; j < this->funcs.size(); ++j) {
-                VoidFunctionLong fnc = (VoidFunctionLong) this->funcs[j];
+                Fitness fnc = (Fitness) this->funcs[j];
                 double r = fnc((long)sol);
                 scores.push_back(r);
             }
 
-            // Getting neighbor solutions of s
+            // Getting neighbor solutions of sol
             vector<C*>* neighbors = (vector<C*>*)sol->getNeighbors();
-            int neighborsSize = (int)neighbors->size();
 
             for (int i = 0; i < neighbors->size(); ++i) {
 
                 if(this->checkSolution(scores, neighbors->at(i))){
-                    sol->copyArr(neighbors->at(i)->getArr(), this->s_size);
+                    sol->copyArr(neighbors->at(i)->getArr(), this->size);
                 }
 
                 nb_eval++;
 
-                if(nb_iteration <= nb_eval)
-                    break;
+                if(nb_iteration <= nb_eval){
+                    delete neighbors;
+                    goto end;
+                }
+
+                cout << ((double)nb_eval*100.0)/nb_iteration << "%" << endl;
             }
 
             delete neighbors;
 
         }while (nb_iteration > nb_eval);
+
+        end:
+        cout << "100.000%" << endl;
 
         return sol;
     }
@@ -166,42 +180,52 @@ public:
      * @param nb_iteration : Number of iteration expected for the HC first improvement
      * @return Solution object : the best solution found
      */
-    C* HillClimberFirstImprovement(int nb_iteration, C *s) {
+    C* HillClimberFirstImprovement(int nb_iteration, C *s = NULL) {
         int nb_eval = 0;
 
         C *sol;
 
-        if(s)
-            sol = s;
+        if(s == NULL)
+            sol = new C(this->size);
         else
-            sol = new C(this->s_size);
+            sol = s;
 
         do{
             vector<double> scores;
 
             // Store scores to avoid redundant compute statements
-            for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](*sol));
+            for (unsigned int j = 0; j < this->funcs.size(); ++j) {
+                Fitness fnc = (Fitness) this->funcs[j];
+                double r = fnc((long)sol);
+                scores.push_back(r);
+            }
 
-            // Getting neighbor solutions of s
-            vector<C*>* neighbors = sol->getNeighbors();
+            // TODO check if it's possible to avoid double loop for BinaryCombinatorySolution
+            for (int i = 0; i < sol->getSize(); ++i) {
 
-            for (int i = 0; i < neighbors->size(); ++i) {
+                for (int j = 0; j < sol->getSize(); ++j) {
 
-                // Break if new solution is better
-                if(this->checkSolution(scores, neighbors->at(i))) {
-                    delete sol;
-                    sol->copyArr(neighbors->at(i)->getArr(), this->s_size);
-                    break;
+                    C *newest = (C*)sol->getNeighbor(sol, i, j);
+
+                    // Break if new solution is better
+                    if(this->checkSolution(scores, newest)) {
+                        sol->copyArr(newest->getArr(), this->size);
+                        break;
+                    }
+
+                    nb_eval++;
+
+                    if(nb_iteration <= nb_eval)
+                        goto end;
                 }
 
-                nb_eval++;
-
-                if(nb_iteration <= nb_eval)
-                    break;
+                cout << ((double)nb_eval*100.0)/nb_iteration << "%" << endl;
             }
 
         }while (nb_iteration > nb_eval);
+
+        end:
+        cout << "100.000%" << endl;
 
         return sol;
     }
@@ -219,7 +243,7 @@ public:
     C* IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation) {
         int nb_eval = 0;
 
-        C *s = new C(this->s_size);
+        C *s = new C(this->size);
         C *best = new C(s->getArr());
 
         do{

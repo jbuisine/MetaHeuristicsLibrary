@@ -16,8 +16,8 @@
 
 using namespace std;
 
-//Type called "VoidFunctionLong" => long function(double)
-typedef double (*VoidFunctionLong)(long);
+//Type called "Fitness" => double function(long: memory address of solution)
+typedef double (*Fitness)(long);
 
 /**
  * Solution class : template of solution
@@ -56,7 +56,6 @@ public:
         for (int i = 0; i < this->size; ++i) {
             this->arr[i] = arr[i];
         }
-
     }
 
     /**
@@ -110,6 +109,9 @@ public:
      * @return
      */
     virtual vector<Solution<T>*>* getNeighbors() = 0;
+
+
+    virtual Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) = 0;
 
     /**
      * Method used for display solution
@@ -176,8 +178,8 @@ protected:
      *
      * @return bool
      */
-    bool sameSolution(Solution<T>* a, Solution<T>* b){
-        for (unsigned int i = 0; i < size; ++i) {
+    static bool sameSolution(Solution<T>* a, Solution<T>* b){
+        for (unsigned int i = 0; i < a->size; ++i) {
             if (a->arr[i] != b->arr[i]){
                 return false;
             }

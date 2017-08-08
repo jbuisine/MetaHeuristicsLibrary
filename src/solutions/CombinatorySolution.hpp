@@ -70,6 +70,17 @@ public:
 
         return sols;
     }
+
+    Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) {
+
+        Solution<T> *newest = (Solution<T>*)CombinatorySolution<T>::copy((CombinatorySolution<T>*)sol);
+        T old_val = newest->getArr(i);
+        T val = newest->getArr(j);
+        newest->setArr(i, newest->getArr(j));
+        newest->setArr(j, old_val);
+
+        return newest;
+    }
 };
 
 

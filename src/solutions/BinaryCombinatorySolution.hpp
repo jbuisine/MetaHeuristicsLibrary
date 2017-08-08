@@ -39,6 +39,20 @@ public:
     }
 
     /**
+      * Copy solution content (array)
+      * @param combinatorySolution : solution
+      */
+    static BinaryCombinatorySolution<T>* copy(BinaryCombinatorySolution<T>* binaryCombinatorySolution){
+        BinaryCombinatorySolution<T>* result = new BinaryCombinatorySolution<T>(binaryCombinatorySolution->getSize());
+
+        for (int i = 0; i < binaryCombinatorySolution->size; ++i) {
+            result->arr[i] = binaryCombinatorySolution->arr[i];
+        }
+
+        return result;
+    }
+
+    /**
      * Method used for getting all neighbors solutions of the solution
      * @return vector : all neighbor solutions
      */
@@ -50,18 +64,24 @@ public:
 
         for (int i = 0; i < this->size; ++i) {
 
-            // TODO check memory possible issues
-            T newest = this->arr;
+            Solution<T> *newest =  (Solution<T>*)BinaryCombinatorySolution<T>::copy(this);
 
-            newest[i] = !(bool)newest[i];
+            newest->getArr()[i] = !(bool)newest->getArr()[i];
 
-            Solution<T> *n = new BinaryCombinatorySolution<T>(newest);
-            sols->push_back(n);
+            sols->push_back(newest);
         }
 
         sols->erase(sols->begin());
 
         return sols;
+    }
+
+    Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) {
+
+        Solution<T> *newest = (Solution<T>*)CombinatorySolution<T>::copy((CombinatorySolution<T>*)sol);
+        newest->getArr()[i] = !(bool)newest->getArr()[i];
+
+        return newest;
     }
 };
 
