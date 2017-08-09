@@ -1,12 +1,7 @@
 #include "Algorithms/Heuristics.hpp"
+#include "configuration.h"
 
 using namespace std;
-
-// Number of element
-const int N = 100;
-
-// Number of iteration
-const int I = 100000;
 
 // Function of Fitness type
 double compute (long ptrToParam) {
@@ -23,43 +18,26 @@ double compute (long ptrToParam) {
     return c;
 }
 
-int main() {
+void mainHCFirst() {
     time_t start = time(0);
 
 
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, N);
+    Heuristics<CombinatorySolution<int>>* h = new Heuristics<CombinatorySolution<int>>(false, f, N);
 
-
-    BinaryCombinatorySolution<int>* s1 = h->HillClimberFirstImprovement(I);
+    CombinatorySolution<int>* s1 = h->HillClimberFirstImprovement(I);
 
     cout << "Best solution found so far : ";
     s1->displaySolution();
     cout << endl;
     cout << "Score of ";
-    cout << compute((long)s1);
+    cout << compute((long)s1) << endl;
 
     delete s1;
 
-    cout << endl;
-
-    BinaryCombinatorySolution<int>* s2 = h->HillClimberBestImprovement(I);
-
-    cout << "Best solution found so far : ";
-    s2->displaySolution();
-    cout << " with a score of ";
-    cout << compute((long)s2);
-
-    delete s2;
-
-    cout << endl;
-
-
     double seconds_since_start = difftime( time(0), start);
 
-    cout << "Time consumed " << seconds_since_start;
-
-    return 0;
+    cout << "Time consumed " << seconds_since_start << " sec.";
 }
