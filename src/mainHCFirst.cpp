@@ -1,22 +1,7 @@
 #include "Algorithms/Heuristics.hpp"
-#include "configuration.h"
+#include "utils.h"
 
 using namespace std;
-
-// Function of Fitness type
-double compute (long ptrToParam) {
-
-    CombinatorySolution<int>* s = (CombinatorySolution<int>*)ptrToParam;
-
-    double c = 0.0;
-
-    int t = s->getSize();
-    for (int i = 0; i < t; ++i) {
-        c += sqrt(s->getArr()[i])*sqrt(i);
-    }
-
-    return c;
-}
 
 void mainHCFirst() {
     time_t start = time(0);
