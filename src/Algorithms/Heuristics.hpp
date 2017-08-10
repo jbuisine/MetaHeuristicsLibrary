@@ -159,8 +159,6 @@ public:
                     delete neighbors;
                     goto end;
                 }
-
-                cout << ((double)nb_eval*100.0)/nb_iteration << "%" << endl;
             }
 
             delete neighbors;
@@ -168,8 +166,6 @@ public:
         }while (nb_iteration > nb_eval);
 
         end:
-        cout << "100.000%" << endl;
-
         return sol;
     }
 
@@ -218,15 +214,11 @@ public:
                     if(nb_iteration <= nb_eval)
                         goto end;
                 }
-
-                cout << ((double)nb_eval*100.0)/nb_iteration << "%" << endl;
             }
 
         }while (nb_iteration > nb_eval);
 
         end:
-        cout << "100.000%" << endl;
-
         return sol;
     }
 
@@ -243,25 +235,27 @@ public:
     C* IteratedLocalSearch(int nb_iteration, int nb_hc_iteration, int perturbation) {
         int nb_eval = 0;
 
-        C *s = new C(this->size);
-        C *best = new C(s->getArr());
+        C *s;
+        C *best = new C(this->size);
 
         do{
-
+            s = C::copy(best);
             s->swapIndex(perturbation);
 
-            C *n = this->HillClimberFirstImprovement(nb_hc_iteration, new C(s->getArr()));
+            C *n = this->HillClimberFirstImprovement(nb_hc_iteration, s);
 
-            if(this->checkSolution(*best, *n)){
-                delete s, best;
-                best = new C(n->getArr());
-                s = new C(n->getArr());
+            if(this->checkSolution(best, n)){
+                best = C::copy(n);
                 delete n;
             }
+
+            cout << "ILS " << ((double)nb_eval*100.0)/nb_iteration << "%" << endl;
 
             nb_eval++;
 
         }while (nb_iteration > nb_eval);
+
+        cout << "100.000%" << endl;
 
         return best;
     }
