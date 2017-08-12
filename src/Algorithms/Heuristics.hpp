@@ -118,9 +118,8 @@ public:
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
      *
-     * @tparam T : Template object Type, subclass of Solution
      * @param nb_iteration : Number of iteration expected for the HC best improvement
-     * @param s : C solution type which is used if user want to improve a solution
+     * @param s : C solution to begin algorithm with
      * @return Solution object : the best solution found
      */
     C* HillClimberBestImprovement(int nb_iteration, C* s = NULL) {
@@ -172,8 +171,8 @@ public:
     /**
      *  HillClimberFirstImprovement implementation with possibility to use multiple objective or single objective scalarizing method
      *
-     * @tparam T : Template object Type, subclass of Solution
      * @param nb_iteration : Number of iteration expected for the HC first improvement
+     * @param s : C solution to begin algorithm with
      * @return Solution object : the best solution found
      */
     C* HillClimberFirstImprovement(int nb_iteration, C *s = NULL) {
@@ -226,7 +225,6 @@ public:
     /**
      * Iterated local search implementation
      *
-     * @tparam T : Template object Type, subclass of Solution
      * @param nb_iteration : number of iteration for ILS
      * @param nb_hc_iteration : number of iteration for each HC first improvement
      * @param perturbation : number of element permute to create new solution
@@ -258,6 +256,36 @@ public:
         cout << "100.000%" << endl;
 
         return best;
+    }
+
+    /**
+     * Tabu search implementation
+     * @param nb_iteration
+     * @return
+     */
+    C* TabuSearch(int nb_iteration){
+        /*
+        sBest ← s0
+        tabuList ← []
+        tabuList.push(s0)
+        while (not stoppingCondition())
+         	sNeighborhood ← getNeighbors(bestCandidate)
+            bestCandidate ← sNeighborHood.firstElement
+            for (sCandidate in sNeighborhood)
+                if ( (not tabuList.contains(sCandidate)) and (fitness(sCandidate) > fitness(bestCandidate)) )
+                    bestCandidate ← sCandidate
+                end
+            end
+            if (fitness(bestCandidate) > fitness(sBest))
+                sBest ← bestCandidate
+            end
+            tabuList.push(bestCandidate)
+            if (tabuList.size > maxTabuSize)
+                tabuList.removeFirst()
+            end
+        end
+        return sBest
+        */
     }
 
 };
