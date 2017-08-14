@@ -36,7 +36,7 @@ void mainHCBest() {
 
     Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int>* s = h->HillClimberBestImprovement(ITERATION);
+    BinaryCombinatorySolution<int>* s = h->hillClimberBestImprovement(ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
@@ -62,7 +62,7 @@ void mainHCFirst() {
 
     Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int>* s = h->HillClimberFirstImprovement(ITERATION);
+    BinaryCombinatorySolution<int>* s = h->hillClimberFirstImprovement(ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
@@ -92,7 +92,34 @@ void mainILS() {
 
     Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int>* s = h->IteratedLocalSearch(ITERATION, HC_ITERATION, NB_PERTURBATION);
+    BinaryCombinatorySolution<int>* s = h->iteratedLocalSearch(ITERATION, HC_ITERATION, NB_PERTURBATION);
+
+    cout << "Best solution found so far : ";
+    s->displaySolution();
+    cout << endl;
+    cout << "Score of ";
+    cout << compute((long)s) << endl;
+
+    delete s;
+
+    double seconds_since_start = difftime( time(0), start);
+
+    cout << "Time consumed " << seconds_since_start << " sec." << endl;
+}
+
+/**
+ * Tabu search algorithm
+ */
+void mainTS() {
+
+    time_t start = time(0);
+
+    vector<Fitness> f;
+    f.push_back((Fitness)compute);
+
+    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+
+    BinaryCombinatorySolution<int>* s = h->tabuSearch(ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
@@ -115,7 +142,8 @@ int main() {
 
     //mainHCFirst();
     //mainHCBest();
-    mainILS();
+    //mainILS();
+    mainTS();
 
     return 0;
 }
