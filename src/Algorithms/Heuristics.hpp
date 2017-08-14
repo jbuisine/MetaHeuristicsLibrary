@@ -263,29 +263,42 @@ public:
      * @param nb_iteration
      * @return
      */
-    C* TabuSearch(int nb_iteration){
-        /*
-        sBest ← s0
-        tabuList ← []
-        tabuList.push(s0)
-        while (not stoppingCondition())
-         	sNeighborhood ← getNeighbors(bestCandidate)
-            bestCandidate ← sNeighborHood.firstElement
-            for (sCandidate in sNeighborhood)
-                if ( (not tabuList.contains(sCandidate)) and (fitness(sCandidate) > fitness(bestCandidate)) )
-                    bestCandidate ← sCandidate
-                end
-            end
-            if (fitness(bestCandidate) > fitness(sBest))
-                sBest ← bestCandidate
-            end
-            tabuList.push(bestCandidate)
-            if (tabuList.size > maxTabuSize)
-                tabuList.removeFirst()
-            end
-        end
-        return sBest
-        */
+    C* TabuSearch(int nbIteration){
+
+        C *best = new C(this->size);
+
+        vector<C*>* tabuList = new vector<C*>();
+        tabuList->push_back(C::copy(best));
+
+        int nbEval = 0;
+
+        while(nbEval < nbIteration) {
+            vector<C *> *neighborHood = best->getNeighbors();
+            C *bestCandidate = neighborHood->at(0);
+
+            for (int i = 1; i < neighborHood->size(); ++i) {
+
+                if (!(std::find(neighborHood->begin(), neighborHood->.end(), neighborHood[i]) != neighborHood->end())
+                    && checkSolution(bestCandidate, neighborHood[i])) {
+                    bestCandidate = (C) neighborHood[i];
+                }
+            }
+
+            if (checkSolution(best, bestCandidate)) {
+                best = bestCandidate;
+            }
+
+            tabuList->push_back(bestCandidate);
+
+            // TODO implement tabu list size limit
+            /*if (tabuList->size() > maxTabuSize){
+                tabuList->erase(tabuList->begin());
+            }*/
+
+            nbEval++;
+        }
+
+        return best;
     }
 
 };
