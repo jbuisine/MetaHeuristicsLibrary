@@ -28,12 +28,12 @@ public:
      * @param s
      * @return
      */
-    static bool checkExists(vector<T>* sols, T s) {
+    static bool checkExists(vector<T*>* sols, T* s) {
         bool check = false;
 
         for (int i = 0; i < sols->size(); ++i) {
 
-            if(sols->at(i)->getArr() == s.getArr()){
+            if(sols->at(i)->getArr() == s->getArr()){
             //if(sameSolution(sols[i], s)){
                 check = true;
                 break;

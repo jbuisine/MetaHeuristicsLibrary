@@ -45,21 +45,21 @@ public:
      * @param sols : the set of solutions
      * @return solutions : new set of non dominated solutions
      */
-    vector<C*>* getNonDominatedSols(vector<C>& sols) {
+    vector<C*>* getNonDominatedSols(vector<C*>* sols) {
 
-        vector<C>* solutions = new vector<C>();
+        vector<C*>* solutions = new vector<C>();
 
-        for (int i = 0; i < sols.size(); ++i) {
+        for (int i = 0; i < sols->size(); ++i) {
 
             vector<double> scores;
 
             // Store scores of i solution to avoid redundant compute statements
             for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](sols[i]));
+                scores.push_back(this->funcs[j](sols->at(i)));
 
-            for (int j = 0; j < sols.size(); ++j) {
+            for (int j = 0; j < sols->size(); ++j) {
 
-                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols[i]))
+                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols->at(i)))
                     solutions->push_back(sols[i]);
             }
         }
@@ -275,14 +275,16 @@ public:
 
         while(nbEval < nbIteration) {
             vector<C*>* neighborHood = (vector<C*>*) best->getNeighbors();
-            C *bestCandidate = neighborHood->at(0);
+            C* bestCandidate = neighborHood->at(0);
 
             for (int i = 1; i < neighborHood->size(); ++i) {
 
-                if (!Utilities<C>::checkExists(neighborHood, bestCandidate) && checkSolution(bestCandidate, neighborHood[i])) {
+                if (!Utilities<C>::checkExists(tabuList, neighborHood->at(i)) && checkSolution(bestCandidate, neighborHood->at(i))) {
 
                     bestCandidate = neighborHood->at(i);
                 }
+
+                nbEval++;
             }
 
             if (checkSolution(best, bestCandidate)) {
@@ -296,7 +298,6 @@ public:
                 tabuList->erase(tabuList->begin());
             }*/
 
-            nbEval++;
         }
 
         return best;
