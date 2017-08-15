@@ -281,23 +281,19 @@ public:
 
                 if (!Utilities<C>::checkExists(tabuList, neighborHood->at(i)) && checkSolution(bestCandidate, neighborHood->at(i))) {
 
-                    bestCandidate = neighborHood->at(i);
+                    bestCandidate = C::copy(neighborHood->at(i));
                 }
 
                 nbEval++;
             }
 
             if (checkSolution(best, bestCandidate)) {
-                best = bestCandidate;
+                delete best;
+                best = C::copy(bestCandidate);
             }
 
-            tabuList->push_back(bestCandidate);
-
-            // TODO implement tabu list size limit
-            /*if (tabuList->size() > maxTabuSize){
-                tabuList->erase(tabuList->begin());
-            }*/
-
+            tabuList->push_back(C::copy(bestCandidate));
+            delete neighborHood;
         }
 
         return best;
