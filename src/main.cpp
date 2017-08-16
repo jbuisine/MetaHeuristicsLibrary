@@ -112,6 +112,9 @@ void mainILS() {
  */
 void mainTS() {
 
+    const int NB_MOVEMENT = 10;
+    const int NB_PERTURBATION = 10;
+
     time_t start = time(0);
 
     vector<Fitness> f;
@@ -119,7 +122,7 @@ void mainTS() {
 
     Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int>* s = h->tabuSearch(ITERATION);
+    BinaryCombinatorySolution<int>* s = h->tabooSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
