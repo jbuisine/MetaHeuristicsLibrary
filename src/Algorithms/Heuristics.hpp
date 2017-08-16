@@ -274,8 +274,8 @@ public:
         // Variable used to store best solution of each iteration
         C* s = C::copy(best);
 
-        vector<C*>* tabuList = new vector<C*>();
-        tabuList->push_back(C::copy(best));
+        // TODO make taboo list as movement list
+        vector<C*>* tabooList = new vector<C*>();
 
         int nbEval = 0;
 
@@ -288,8 +288,9 @@ public:
                 C* currentMov = C::copy(s);
                 currentMov->swapIndex(nbPerturbation);
 
-                if(!Utilities<C>::checkExists(tabuList, currentMov)){
-                    best = C::copy(currentMov);
+                if(!Utilities<C>::checkExists(tabooList, currentMov)){
+                    s = C::copy(currentMov);
+
                     delete currentMov;
                 }else{
                     delete currentMov;
@@ -317,7 +318,7 @@ public:
             }
 
             // 4. Mark as taboo this movement
-            tabuList->push_back(C::copy(t));
+            tabooList->push_back(C::copy(t));
             delete neighborHood;
 
             // 5. Set new context for next iteration

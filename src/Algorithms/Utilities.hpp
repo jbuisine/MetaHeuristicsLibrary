@@ -29,18 +29,15 @@ public:
      * @return
      */
     static bool checkExists(vector<T*>* sols, T* s) {
-        bool check = false;
 
         for (int i = 0; i < sols->size(); ++i) {
 
-            if(sols->at(i)->getArr() == s->getArr()){
-            //if(sameSolution(sols[i], s)){
-                check = true;
-                break;
+            if(sameSolution(sols->at(i), s)){
+                return true;
             }
         }
 
-        return check;
+        return false;
     }
 
 private:
@@ -50,8 +47,8 @@ private:
       * @param b : second solution to compare
       * @return true if same
       */
-    static bool sameSolution(Solution<T>* a, Solution<T>* b){
-        for (unsigned int i = 0; i < a->getSize(); ++i) {
+    static bool sameSolution(T* a, T* b){
+        for (int i = 0; i < a->getSize(); ++i) {
             if (a->getArr()[i] != b->getArr()[i]){
                 return false;
             }
