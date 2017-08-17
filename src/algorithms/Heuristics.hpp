@@ -14,7 +14,7 @@
 template<typename C>
 class Heuristics {
 
-private:
+protected:
     /**
      * 'false' specify minimizing problem and 'true' maximizing
      */
@@ -23,21 +23,6 @@ private:
     vector<Fitness> funcs;
 
     int size;
-
-public:
-
-    /**
-     * Initialization of context
-     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
-     * @param f : objective function(s)
-     * @param s_size : size of problem solution
-     */
-    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
-        this->funcs = funcs;
-        this->size = size;
-        this->problem_type = problem_type;
-    }
-
 
     /**
      * Method used for getting all non dominated solutions from set of solutions
@@ -114,6 +99,21 @@ public:
         }
 
         return (counter == this->funcs.size());
+    }
+
+
+public:
+
+    /**
+     * Initialization of context
+     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
+     * @param f : objective function(s)
+     * @param s_size : size of problem solution
+     */
+    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
+        this->funcs = funcs;
+        this->size = size;
+        this->problem_type = problem_type;
     }
 
     /**
@@ -258,77 +258,6 @@ public:
 
         return best;
     }
-
-    /**
-     * Tabu search implementation
-     * @param nbEvaluation : number of iteration
-     * @param nbMovement : number of movement expected at each iteration to obtain new solution
-     * @param nbPerturbation : number of elements permuted into a solution at each movement
-     * @return
-     */
-    C* tabooSearchSimple(int nbEvaluation, int nbMovement, int nbPerturbation){
-
-        // Best solution to return
-        C *best = new C(this->size);
-
-        // Variable used to store best solution of each iteration
-        C* s = C::copy(best);
-
-        // TODO make taboo list as movement list
-        vector<C*>* tabooList = new vector<C*>();
-
-        int nbEval = 0;
-
-        while(nbEval < nbEvaluation) {
-
-            // 1. Do N non taboo movement to obtain new solution to start iteration with
-            for (int i = 0; i < nbMovement; ++i) {
-                begin:
-
-                C* currentMov = C::copy(s);
-                currentMov->swapIndex(nbPerturbation);
-
-                if(!Utilities<C>::checkExists(tabooList, currentMov)){
-                    s = C::copy(currentMov);
-
-                    delete currentMov;
-                }else{
-                    delete currentMov;
-                    goto begin;
-                }
-            }
-
-            // 2. Getting best neighbor into neighborhood of S
-            vector<C*>* neighborHood = (vector<C*>*) best->getNeighbors();
-            C* t = neighborHood->at(0);
-
-            for (int i = 1; i < neighborHood->size(); ++i) {
-
-                if (checkSolution(t, neighborHood->at(i))) {
-                    t = C::copy(neighborHood->at(i));
-                }
-
-                nbEval++;
-            }
-
-            // 3. Update best solution if it is
-            if (checkSolution(best, t)) {
-                delete best;
-                best = C::copy(t);
-            }
-
-            // 4. Mark as taboo this movement
-            tabooList->push_back(C::copy(t));
-            delete neighborHood;
-
-            // 5. Set new context for next iteration
-            s = C::copy(t);
-            delete t;
-        }
-
-        return best;
-    }
-
 };
 
 

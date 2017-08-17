@@ -2,7 +2,8 @@
 // Created by jbuisine on 09/08/17.
 //
 
-#include "Algorithms/Heuristics.hpp"
+#include "algorithms/Heuristics.hpp"
+#include "algorithms/TabooSearch.hpp"
 
 // Number of element
 const int SOL_SIZE = 100;
@@ -114,27 +115,41 @@ void mainTS() {
 
     const int NB_MOVEMENT = 10;
     const int NB_PERTURBATION = 10;
+    const int TABOO_COUNTER = 3;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    TabooSearch<BinaryCombinatorySolution<int>>* h = new TabooSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int>* s = h->tabooSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
+    BinaryCombinatorySolution<int>* s1 = h->tabooSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
-    cout << "Best solution found so far : ";
-    s->displaySolution();
+    cout << "Best solution found so far for Taboo search simple : ";
+    s1->displaySolution();
     cout << endl;
     cout << "Score of ";
-    cout << compute((long)s) << endl;
-
-    delete s;
+    cout << compute((long)s1) << endl;
+    delete s1;
 
     double seconds_since_start = difftime( time(0), start);
 
     cout << "Time consumed " << seconds_since_start << " sec." << endl;
+
+    BinaryCombinatorySolution<int>* s2 = h->tabooSearchMemory(ITERATION, NB_MOVEMENT, NB_PERTURBATION, TABOO_COUNTER);
+
+    cout << "Best solution found so far for Taboo search Memory : ";
+    s2->displaySolution();
+    cout << endl;
+    cout << "Score of ";
+    cout << compute((long)s2) << endl;
+
+    delete s2;
+
+    double seconds_since_s1 = difftime( time(0), (time_t)seconds_since_start);
+
+    cout << "Time consumed " << seconds_since_s1 << " sec." << endl;
 }
 
 /**

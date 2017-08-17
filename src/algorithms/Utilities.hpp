@@ -40,8 +40,6 @@ public:
         return false;
     }
 
-private:
-
     /**
       * @param a : first solution to compare
       * @param b : second solution to compare
