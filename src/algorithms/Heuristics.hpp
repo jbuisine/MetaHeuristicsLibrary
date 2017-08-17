@@ -14,7 +14,7 @@
 template<typename C>
 class Heuristics {
 
-private:
+protected:
     /**
      * 'false' specify minimizing problem and 'true' maximizing
      */
@@ -23,21 +23,6 @@ private:
     vector<Fitness> funcs;
 
     int size;
-
-public:
-
-    /**
-     * Initialization of context
-     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
-     * @param f : objective function(s)
-     * @param s_size : size of problem solution
-     */
-    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
-        this->funcs = funcs;
-        this->size = size;
-        this->problem_type = problem_type;
-    }
-
 
     /**
      * Method used for getting all non dominated solutions from set of solutions
@@ -116,14 +101,29 @@ public:
         return (counter == this->funcs.size());
     }
 
+
+public:
+
+    /**
+     * Initialization of context
+     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
+     * @param f : objective function(s)
+     * @param s_size : size of problem solution
+     */
+    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
+        this->funcs = funcs;
+        this->size = size;
+        this->problem_type = problem_type;
+    }
+
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
      *
-     * @param nb_iteration : Number of iteration expected for the HC best improvement
+     * @param nbEvaluation : Number of iteration expected for the HC best improvement
      * @param s : C solution to begin algorithm with
      * @return Solution object : the best solution found
      */
-    C* hillClimberBestImprovement(int nbIteration, C* s = NULL) {
+    C* hillClimberBestImprovement(int nbEvaluation, C* s = NULL) {
         int nbEval = 0;
 
         C *sol;
@@ -155,7 +155,7 @@ public:
 
                 nbEval++;
 
-                if(nbIteration <= nbEval){
+                if(nbEvaluation <= nbEval){
                     delete neighbors;
                     goto end;
                 }
@@ -163,7 +163,7 @@ public:
 
             delete neighbors;
 
-        }while (nbIteration > nbEval);
+        }while (nbEvaluation > nbEval);
 
         end:
         return sol;
@@ -172,11 +172,11 @@ public:
     /**
      *  HillClimberFirstImprovement implementation with possibility to use multiple objective or single objective scalarizing method
      *
-     * @param nb_iteration : Number of iteration expected for the HC first improvement
+     * @param nbEvaluation : Number of iteration expected for the HC first improvement
      * @param s : C solution to begin algorithm with
      * @return Solution object : the best solution found
      */
-    C* hillClimberFirstImprovement(int nbIteration, C *s = NULL) {
+    C* hillClimberFirstImprovement(int nbEvaluation, C *s = NULL) {
         int nbEval = 0;
 
         C *sol;
@@ -211,12 +211,12 @@ public:
 
                     nbEval++;
 
-                    if(nbIteration <= nbEval)
+                    if(nbEvaluation <= nbEval)
                         goto end;
                 }
             }
 
-        }while (nbIteration > nbEval);
+        }while (nbEvaluation > nbEval);
 
         end:
         return sol;
@@ -226,12 +226,12 @@ public:
     /**
      * Iterated local search implementation
      *
-     * @param nb_iteration : number of iteration for ILS
-     * @param nb_hc_iteration : number of iteration for each HC first improvement
-     * @param perturbation : number of element permute to create new solution
+     * @param nbEvaluation : number of iteration for ILS
+     * @param nbHcIteration : number of iteration for each HC first improvement
+     * @param nbPerturbation : number of element permute to create new solution
      * @return the best solution found
      */
-    C* iteratedLocalSearch(int nbIteration, int nbHcIteration, int perturbation) {
+    C* iteratedLocalSearch(int nbEvaluation, int nbHcIteration, int nbPerturbation) {
         int nbEval = 0;
 
         C *s;
@@ -239,7 +239,7 @@ public:
 
         do{
             s = C::copy(best);
-            s->swapIndex(perturbation);
+            s->swapIndex(nbPerturbation);
 
             C *n = this->hillClimberFirstImprovement(nbHcIteration, s);
 
@@ -248,61 +248,16 @@ public:
                 delete n;
             }
 
-            cout << "ILS " << ((double)nbEval*100.0)/nbIteration << "%" << endl;
+            cout << "ILS " << ((double)nbEval*100.0)/nbEvaluation << "%" << endl;
 
             nbEval++;
 
-        }while (nbIteration > nbEval);
+        }while (nbEvaluation > nbEval);
 
         cout << "100.000%" << endl;
 
         return best;
     }
-
-    /**
-     * Tabu search implementation
-     * @param nb_iteration
-     * @return
-     */
-    C* tabuSearch(int nbIteration){
-
-        C *best = new C(this->size);
-
-        vector<C*>* tabuList = new vector<C*>();
-        tabuList->push_back(C::copy(best));
-
-        int nbEval = 0;
-
-        while(nbEval < nbIteration) {
-            vector<C*>* neighborHood = (vector<C*>*) best->getNeighbors();
-            C* bestCandidate = neighborHood->at(0);
-
-            for (int i = 1; i < neighborHood->size(); ++i) {
-
-                if (!Utilities<C>::checkExists(tabuList, neighborHood->at(i)) && checkSolution(bestCandidate, neighborHood->at(i))) {
-
-                    bestCandidate = neighborHood->at(i);
-                }
-
-                nbEval++;
-            }
-
-            if (checkSolution(best, bestCandidate)) {
-                best = bestCandidate;
-            }
-
-            tabuList->push_back(bestCandidate);
-
-            // TODO implement tabu list size limit
-            /*if (tabuList->size() > maxTabuSize){
-                tabuList->erase(tabuList->begin());
-            }*/
-
-        }
-
-        return best;
-    }
-
 };
 
 
