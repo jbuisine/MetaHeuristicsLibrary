@@ -103,6 +103,7 @@ public:
 
                 if(!checkMovementExists(tabooList, s, currentMov)){
                     s = C::copy(currentMov);
+
                     delete currentMov;
                 }else{
                     delete currentMov;
@@ -155,7 +156,7 @@ public:
      * @param tabooCounter : number of times a movement is defined as taboo
      * @return
      */
-    C* tabooSearchMemory(int nbEvaluation, int nbMovement, int nbPerturbation, int tabooCounter){
+    C* tabooSearchCounter(int nbEvaluation, int nbMovement, int nbPerturbation, int tabooCounter){
 
         // Best solution to return
         C *best = new C(this->size);
