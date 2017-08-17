@@ -3,7 +3,7 @@
 //
 
 #include "algorithms/Heuristics.hpp"
-#include "algorithms/TabooSearch.hpp"
+#include "algorithms/TabuSearch.hpp"
 
 // Number of element
 const int SOL_SIZE = 100;
@@ -109,7 +109,7 @@ void mainILS() {
 }
 
 /**
- * Taboo search algorithm simple
+ * Tabu search algorithm simple
  */
 void mainTSSimple() {
 
@@ -121,11 +121,11 @@ void mainTSSimple() {
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    TabooSearch<BinaryCombinatorySolution<int>> *h = new TabooSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    TabuSearch<BinaryCombinatorySolution<int>> *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int> *s = h->tabooSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
+    BinaryCombinatorySolution<int> *s = h->tabuSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
-    cout << "Best solution found so far for Taboo search simple : ";
+    cout << "Best solution found so far for Tabu search simple : ";
     s->displaySolution();
     cout << endl;
     cout << "Score of ";
@@ -138,24 +138,24 @@ void mainTSSimple() {
 }
 
 /**
- * Taboo search algorithm with counter memory
+ * Tabu search algorithm with counter memory
  */
 void mainTSCounter() {
 
     const int NB_MOVEMENT = 10;
     const int NB_PERTURBATION = 10;
-    const int TABOO_COUNTER = 3;
+    const int Tabu_COUNTER = 3;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    TabooSearch<BinaryCombinatorySolution<int>> *h = new TabooSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    TabuSearch<BinaryCombinatorySolution<int>> *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
-    BinaryCombinatorySolution<int> *s = h->tabooSearchCounter(ITERATION, NB_MOVEMENT, NB_PERTURBATION, TABOO_COUNTER);
+    BinaryCombinatorySolution<int> *s = h->tabuSearchCounter(ITERATION, NB_MOVEMENT, NB_PERTURBATION, Tabu_COUNTER);
 
-    cout << "Best solution found so far for Taboo search with counter : ";
+    cout << "Best solution found so far for Tabu search with counter : ";
     s->displaySolution();
     cout << endl;
     cout << "Score of ";
