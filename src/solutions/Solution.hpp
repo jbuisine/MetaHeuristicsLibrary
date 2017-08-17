@@ -147,7 +147,6 @@ protected:
      * Constructor used for creating new solution
      */
     Solution(int s) {
-        srand((unsigned int) time(0));
         arr = (T*)(malloc(sizeof(T) * s));
         size = s;
     }

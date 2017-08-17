@@ -144,6 +144,9 @@ public:
             delete t;
         }
 
+        delete tabuList;
+        delete s;
+
         return best;
     }
 
@@ -220,6 +223,9 @@ public:
             s = C::copy(t);
             delete t;
         }
+
+        delete tabuList;
+        delete s;
 
         return best;
     }

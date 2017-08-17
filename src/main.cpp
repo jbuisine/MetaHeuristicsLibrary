@@ -173,10 +173,12 @@ void mainTSCounter() {
  */
 int main() {
 
+    srand((unsigned)time(NULL));
+
     //mainHCFirst();
     //mainHCBest();
     //mainILS();
-    //mainTSSimple();
+    mainTSSimple();
     mainTSCounter();
 
     return 0;
