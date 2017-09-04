@@ -98,7 +98,7 @@ protected:
             }
         }
 
-        return (counter == this->funcs.size());
+        return counter == this->funcs.size();
     }
 
 

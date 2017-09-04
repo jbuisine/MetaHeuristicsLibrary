@@ -86,7 +86,7 @@ public:
         C *best = new C(this->size);
 
         // Variable used to store best solution of each iteration
-        C* s = C::copy(best);
+        C *s = C::copy(best);
 
         vector<TabuMovement*>* tabuList = new vector<TabuMovement*>();
 
