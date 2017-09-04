@@ -41,6 +41,8 @@ public:
     }
 
     /**
+      * Method which compares if solutions are sames
+      *
       * @param a : first solution to compare
       * @param b : second solution to compare
       * @return true if same
@@ -52,5 +54,16 @@ public:
             }
         }
         return true;
+    }
+
+    /**
+     * Method which returns a random double of an interval
+     *
+     * @param i0 : first part of interval
+     * @param i1 : second part of interval
+     * @return
+     */
+    static double randInterval(double i0, double i1){
+        return i0 + (i1 - i0) * rand() / ((double) RAND_MAX);
     }
 };

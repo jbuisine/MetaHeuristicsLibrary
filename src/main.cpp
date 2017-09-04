@@ -4,6 +4,7 @@
 
 #include "algorithms/Heuristics.hpp"
 #include "algorithms/TabuSearch.hpp"
+#include "algorithms/SimulatedAnnealing.hpp"
 
 // Number of element
 const int SOL_SIZE = 100;
@@ -14,7 +15,7 @@ const int ITERATION = 100;
 // Function of Fitness type
 double compute (long ptrToParam) {
 
-    BinaryCombinatorySolution<int>* s = (BinaryCombinatorySolution<int>*)ptrToParam;
+    auto * s = (BinaryCombinatorySolution<int>*)ptrToParam;
 
     double c = 0.0;
 
@@ -35,7 +36,7 @@ void mainHCBest() {
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    auto * h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
     BinaryCombinatorySolution<int>* s = h->hillClimberBestImprovement(ITERATION);
 
@@ -61,7 +62,7 @@ void mainHCFirst() {
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    auto * h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
     BinaryCombinatorySolution<int>* s = h->hillClimberFirstImprovement(ITERATION);
 
@@ -91,7 +92,7 @@ void mainILS() {
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    Heuristics<BinaryCombinatorySolution<int>>* h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    auto * h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
     BinaryCombinatorySolution<int>* s = h->iteratedLocalSearch(ITERATION, HC_ITERATION, NB_PERTURBATION);
 
@@ -121,7 +122,7 @@ void mainTSSimple() {
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    TabuSearch<BinaryCombinatorySolution<int>> *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
     BinaryCombinatorySolution<int> *s = h->tabuSearchSimple(ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
@@ -151,11 +152,42 @@ void mainTSCounter() {
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    TabuSearch<BinaryCombinatorySolution<int>> *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
 
     BinaryCombinatorySolution<int> *s = h->tabuSearchCounter(ITERATION, NB_MOVEMENT, NB_PERTURBATION, Tabu_COUNTER);
 
     cout << "Best solution found so far for Tabu search with counter : ";
+    s->displaySolution();
+    cout << endl;
+    cout << "Score of ";
+    cout << compute((long) s) << endl;
+    delete s;
+
+    double seconds_since_start = difftime(time(0), start);
+
+    cout << "Time consumed " << seconds_since_start << " sec." << endl;
+}
+
+/**
+ * Tabu search algorithm with counter memory
+ */
+void mainSA() {
+
+    const int NB_EVAL_PER_TEMP   = 100;
+    const double TEMPERATURE     = 10000.0;
+    const double MIN_TEMPERATURE = 0.003;
+    const double DECREASE_FACTOR = 0.9;
+
+    time_t start = time(0);
+
+    vector<Fitness> f;
+    f.push_back((Fitness) compute);
+
+    auto *h = new SimulatedAnnealing<BinaryCombinatorySolution<int>>(false, f, SOL_SIZE);
+
+    BinaryCombinatorySolution<int> *s = h->SimulatedAnnealingSimple(NB_EVAL_PER_TEMP, TEMPERATURE, MIN_TEMPERATURE, DECREASE_FACTOR);
+
+    cout << "Best solution found so far for Simulated Annealing search : ";
     s->displaySolution();
     cout << endl;
     cout << "Score of ";
@@ -178,8 +210,9 @@ int main() {
     //mainHCFirst();
     //mainHCBest();
     //mainILS();
-    mainTSSimple();
-    mainTSCounter();
+    //mainTSSimple();
+    //mainTSCounter();
+    mainSA();
 
     return 0;
 }

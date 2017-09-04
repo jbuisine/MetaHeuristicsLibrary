@@ -12,6 +12,30 @@ class SimulatedAnnealing : public Heuristics<C> {
 
 private:
 
+    /**
+     * Method used for accept or not a new solution after comparison
+     * @param o : current best solution
+     * @param n : new solution to compare
+     * @param temperature : current temperature
+     * @return the acceptance probability
+     */
+    double acceptanceProbability(C *o, C *n, double temperature){
+
+        if(this->checkSolution(o, n)){
+            return 1.0;
+        }
+
+        double ap = 0.0;
+
+        // Getting sum of acceptance probability for each criterion
+        for(int i = 0; i < this->funcs.size(); i++){
+            cout << exp((this->funcs[i]((long)o) - this->funcs[i]((long)n))/temperature) << endl;
+            ap += exp((this->funcs[i]((long)o) - this->funcs[i]((long)n))/temperature);
+        }
+
+        return ap / this->funcs.size();
+    }
+
 public:
 
     /**
@@ -24,26 +48,41 @@ public:
 
     /**
      * Simulated annealing simple implementation
-     * @param nbEvaluation : number of iteration
+     * @param nbEvaluation : number of iteration before changing temperature
      * @param temperature : starting temperature to decrease
+     * @param minTemperature : stopping criterion
      * @param alpha : constant defined to decrease temperature (typical choices are between 0.8 & 0.99) 
      * @return
      */
-    C* SimulatedAnnealingSimple(int nbEvaluation, int temperature, int alpha){
+    C* SimulatedAnnealingSimple(int nbEvaluation, double temperature, double minTemperature, int alpha){
 
         // Best solution to return
         C *best = new C(this->size);
 
-        // TODO Implement simulated annealing algorithm
+        while(temperature > minTemperature){
+            int i = 0;
 
-        // Initialize T, T_min and alpha a constant used to decrease temperature
+            while(i <= nbEvaluation){
 
-        // 1. Generate random solution
-        // 2. Calculate cost solution defined
-        // 3. Getting randomly a neighboring solution
-        // 4. Calculate new solution's cost
-        // 5. Compare the two solutions
-        // 6. Repeat step 3 to 5 above until verified stop criterion
+                C *neighbor = C::copy(best);
+                neighbor->swapIndex(1);
+
+                double ap = acceptanceProbability(best, neighbor, temperature);
+
+                // TODO move this util function into another util class (template is not necessary)
+                double r = Utilities<C>::randInterval(0, 1);
+                cout << ap << " - " << r << endl;
+                if(ap > r){
+                    delete best;
+                    best = C::copy(neighbor);
+                }
+
+                delete neighbor;
+
+                i+=1;
+            }
+            temperature = temperature * alpha;
+        }
 
         return best;
     }
