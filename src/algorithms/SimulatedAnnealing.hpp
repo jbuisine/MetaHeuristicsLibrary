@@ -29,7 +29,6 @@ private:
 
         // Getting sum of acceptance probability for each criterion
         for(int i = 0; i < this->funcs.size(); i++){
-            cout << exp((this->funcs[i]((long)o) - this->funcs[i]((long)n))/temperature) << endl;
             ap += exp((this->funcs[i]((long)o) - this->funcs[i]((long)n))/temperature);
         }
 
@@ -57,7 +56,7 @@ public:
     C* SimulatedAnnealingSimple(int nbEvaluation, double temperature, double minTemperature, int alpha){
 
         // Best solution to return
-        C *best = new C(this->size);
+        auto *best = new C(this->size);
 
         while(temperature > minTemperature){
             int i = 0;
@@ -71,7 +70,7 @@ public:
 
                 // TODO move this util function into another util class (template is not necessary)
                 double r = Utilities<C>::randInterval(0, 1);
-                cout << ap << " - " << r << endl;
+
                 if(ap > r){
                     delete best;
                     best = C::copy(neighbor);
