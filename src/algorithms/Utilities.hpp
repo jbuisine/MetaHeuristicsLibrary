@@ -3,7 +3,7 @@
 //
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <vector>
 #include <iostream>
@@ -11,12 +11,6 @@
 
 using namespace std;
 
-/**
-* Method used for check if solution already exists into a set of solution
-* @param sols : set of all solutions
-* @param s : solution to check
-* @return boolean : True if solution exists, otherwise False
-*/
 template<typename T>
 class Utilities{
 
@@ -41,6 +35,8 @@ public:
     }
 
     /**
+      * Method which compares if solutions are sames
+      *
       * @param a : first solution to compare
       * @param b : second solution to compare
       * @return true if same

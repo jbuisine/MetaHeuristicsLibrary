@@ -8,29 +8,29 @@
 #include <algorithm>
 
 template<typename C>
-class TabooSearch : public Heuristics<C> {
+class TabuSearch : public Heuristics<C> {
 
 private:
 
-    struct TabooMovement{
+    struct TabuMovement{
         C* t;
         C* s;
     };
 
-    struct TabooMovementCounter{
+    struct TabuMovementCounter{
         C* t;
         C* s;
         int counter;
     };
 
     /**
-     * Method which checks if movement is defined as taboo
-     * @param movements : taboo list of movement
+     * Method which checks if movement is defined as tabu
+     * @param movements : tabu list of movement
      * @param t : movement t
      * @param s : movement s
-     * @return true if movement is taboo otherwise false
+     * @return true if movement is tabu otherwise false
      */
-    bool checkMovementExists(vector<TabooMovement*>* movements, C* t, C* s){
+    bool checkMovementExists(vector<TabuMovement*>* movements, C* t, C* s){
 
         for (int i = 0; i < movements->size(); ++i) {
             if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
@@ -42,19 +42,19 @@ private:
     }
 
     /**
-     * Method which checks if movement is defined as taboo and decrease taboo counter if it is
-     * @param movements : taboo list of movement
+     * Method which checks if movement is defined as tabu and decrease tabu counter if it is
+     * @param movements : tabu list of movement
      * @param t : movement t
      * @param s : movement s
-     * @return true if movement is taboo otherwise false
+     * @return true if movement is tabu otherwise false
      */
-    bool checkMovementCounterExists(vector<TabooMovementCounter*>* movements, C* s, C* t, int tabooCounter){
+    bool checkMovementCounterExists(vector<TabuMovementCounter*>* movements, C* s, C* t, int tabuCounter){
         for (int i = 0; i < movements->size(); ++i) {
             if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
                 movements->at(i)->counter--;
 
                 if(movements->at(i)->counter == 0){
-                    movements->at(i)->counter = tabooCounter;
+                    movements->at(i)->counter = tabuCounter;
                     return true;
                 }
             }
@@ -71,37 +71,37 @@ public:
      * @param f : objective function(s)
      * @param s_size : size of problem solution
      */
-    TabooSearch(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
+    TabuSearch(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
 
     /**
-     * Taboo search simple implementation
+     * tabu search simple implementation
      * @param nbEvaluation : number of iteration
      * @param nbMovement : number of movement expected at each iteration to obtain new solution
      * @param nbPerturbation : number of elements permuted into a solution at each movement
      * @return
      */
-    C* tabooSearchSimple(int nbEvaluation, int nbMovement, int nbPerturbation){
+    C* runStrongMemory(int nbEvaluation, int nbMovement, int nbPerturbation){
 
         // Best solution to return
         C *best = new C(this->size);
 
         // Variable used to store best solution of each iteration
-        C* s = C::copy(best);
+        C *s = C::copy(best);
 
-        vector<TabooMovement*>* tabooList = new vector<TabooMovement*>();
+        vector<TabuMovement*>* tabuList = new vector<TabuMovement*>();
 
         int nbEval = 0;
 
         while(nbEval < nbEvaluation) {
 
-            // 1. Do N non taboo movement to obtain new solution to start iteration with
+            // 1. Do N non tabu movement to obtain new solution to start iteration with
             for (int i = 0; i < nbMovement; ++i) {
                 begin:
 
                 C* currentMov = C::copy(s);
                 currentMov->swapIndex(nbPerturbation);
 
-                if(!checkMovementExists(tabooList, s, currentMov)){
+                if(!checkMovementExists(tabuList, s, currentMov)){
                     s = C::copy(currentMov);
 
                     delete currentMov;
@@ -130,33 +130,36 @@ public:
                 best = C::copy(t);
             }
 
-            // 4. Mark as taboo this movement
-            TabooMovement* mov = new TabooMovement;
+            // 4. Mark as tabu this movement
+            TabuMovement* mov = new TabuMovement;
 
             mov->t = C::copy(t);
             mov->s = C::copy(s);
 
-            tabooList->push_back(mov);
+            tabuList->push_back(mov);
             delete neighborHood;
 
             // 5. Set new context for next iteration
             s = C::copy(t);
             delete t;
         }
+
+        delete tabuList;
+        delete s;
 
         return best;
     }
 
 
     /**
-     * Taboo search implementation with memory counter
+     * tabu search implementation with memory counter
      * @param nbEvaluation : number of iteration
      * @param nbMovement : number of movement expected at each iteration to obtain new solution
      * @param nbPerturbation : number of elements permuted into a solution at each movement
-     * @param tabooCounter : number of times a movement is defined as taboo
+     * @param tabuCounter : number of times a movement is defined as tabu
      * @return
      */
-    C* tabooSearchCounter(int nbEvaluation, int nbMovement, int nbPerturbation, int tabooCounter){
+    C* runAdaptableMemory(int nbEvaluation, int nbMovement, int nbPerturbation, int tabuCounter){
 
         // Best solution to return
         C *best = new C(this->size);
@@ -164,20 +167,20 @@ public:
         // Variable used to store best solution of each iteration
         C* s = C::copy(best);
 
-        vector<TabooMovementCounter*>* tabooList = new vector<TabooMovementCounter*>();
+        vector<TabuMovementCounter*>* tabuList = new vector<TabuMovementCounter*>();
 
         int nbEval = 0;
 
         while(nbEval < nbEvaluation) {
 
-            // 1. Do N non taboo movement to obtain new solution to start iteration with
+            // 1. Do N non tabu movement to obtain new solution to start iteration with
             for (int i = 0; i < nbMovement; ++i) {
                 begin:
 
                 C* currentMov = C::copy(s);
                 currentMov->swapIndex(nbPerturbation);
 
-                if(!checkMovementCounterExists(tabooList, s, currentMov, tabooCounter)){
+                if(!checkMovementCounterExists(tabuList, s, currentMov, tabuCounter)){
                     s = C::copy(currentMov);
 
                     delete currentMov;
@@ -206,20 +209,23 @@ public:
                 best = C::copy(t);
             }
 
-            // 4. Mark as taboo this movement
-            TabooMovementCounter* mov = new TabooMovementCounter;
+            // 4. Mark as tabu this movement
+            TabuMovementCounter* mov = new TabuMovementCounter;
 
             mov->t = t;
             mov->s = s;
-            mov->counter = tabooCounter;
+            mov->counter = tabuCounter;
 
-            tabooList->push_back(mov);
+            tabuList->push_back(mov);
             delete neighborHood;
 
             // 5. Set new context for next iteration
             s = C::copy(t);
             delete t;
         }
+
+        delete tabuList;
+        delete s;
 
         return best;
     }
