@@ -51,15 +51,15 @@ double compute (long ptrToParam) {
 void mainILS() {
 
     const int ILS_ITERATION = 1000;
-    const int HC_ITERATION = 1000;
-    const int NB_PERTURBATION = 10;
+    const int HC_ITERATION = 100;
+    const int NB_PERTURBATION = 50;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    auto * h = new Heuristics<BinaryCombinatorySolution<int>>(false, f, nbElements);
+    auto * h = new Heuristics<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
     BinaryCombinatorySolution<int>* s = h->iteratedLocalSearch(ILS_ITERATION, HC_ITERATION, NB_PERTURBATION);
 
@@ -90,7 +90,7 @@ void mainTSSimple() {
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, nbElements);
+    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
     BinaryCombinatorySolution<int> *s = h->tabuSearchSimple(TSS_ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
@@ -121,7 +121,7 @@ void mainTSCounter() {
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(false, f, nbElements);
+    auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
     BinaryCombinatorySolution<int> *s = h->tabuSearchCounter(TABU_ITERATION, NB_MOVEMENT, NB_PERTURBATION, TABU_COUNTER);
 
@@ -142,17 +142,17 @@ void mainTSCounter() {
  */
 void mainSA() {
 
-    const int NB_EVAL_PER_TEMP   = 100;
-    const double TEMPERATURE     = 10000.0;
+    const int NB_EVAL_PER_TEMP   = 10;
+    const double TEMPERATURE     = 300.0;
     const double MIN_TEMPERATURE = 0.003;
-    const double DECREASE_FACTOR = 0.9;
+    const double DECREASE_FACTOR = 0.98;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness) compute);
 
-    auto *h = new SimulatedAnnealing<BinaryCombinatorySolution<int>>(false, f, nbElements);
+    auto *h = new SimulatedAnnealing<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
     BinaryCombinatorySolution<int> *s = h->SimulatedAnnealingSimple(NB_EVAL_PER_TEMP, TEMPERATURE, MIN_TEMPERATURE, DECREASE_FACTOR);
 
@@ -208,7 +208,7 @@ int main() {
 
     loadKnapsackInfo("/Users/JeromeBuisine/CLionProjects/MetaHeuristicsLibrary/src/resources/knapsack/ks_1000.txt");
 
-    mainILS();
+    //mainILS();
     mainSA();
 
     return 0;

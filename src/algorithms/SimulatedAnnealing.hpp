@@ -29,7 +29,10 @@ private:
 
         // Getting sum of acceptance probability for each criterion
         for(int i = 0; i < this->funcs.size(); i++){
-            ap += exp((this->funcs[i]((long)o) - this->funcs[i]((long)n))/temperature);
+            if(this->problem_type)
+                ap += exp((this->funcs[i]((long)n) - this->funcs[i]((long)o))/temperature);
+            else
+                ap += exp(-(this->funcs[i]((long)n) - this->funcs[i]((long)o))/temperature);
         }
 
         return ap / this->funcs.size();
@@ -53,7 +56,7 @@ public:
      * @param alpha : constant defined to decrease temperature (typical choices are between 0.8 & 0.99) 
      * @return
      */
-    C* SimulatedAnnealingSimple(int nbEvaluation, double temperature, double minTemperature, int alpha){
+    C* SimulatedAnnealingSimple(int nbEvaluation, double temperature, double minTemperature, double alpha){
 
         // Best solution to return
         auto *best = new C(this->size);
