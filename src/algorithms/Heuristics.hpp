@@ -8,6 +8,7 @@
 
 #include "../solutions/CombinatorySolution.hpp"
 #include "../solutions/BinaryCombinatorySolution.hpp"
+#include "../utils/Utils.hpp"
 #include "Utilities.hpp"
 #include <algorithm>
 
@@ -101,28 +102,13 @@ protected:
         return counter == this->funcs.size();
     }
 
-
-public:
-
     /**
-     * Initialization of context
-     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
-     * @param f : objective function(s)
-     * @param s_size : size of problem solution
-     */
-    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
-        this->funcs = funcs;
-        this->size = size;
-        this->problem_type = problem_type;
-    }
-
-    /**
-     *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
-     *
-     * @param nbEvaluation : Number of iteration expected for the HC best improvement
-     * @param s : C solution to begin algorithm with
-     * @return Solution object : the best solution found
-     */
+ *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
+ *
+ * @param nbEvaluation : Number of iteration expected for the HC best improvement
+ * @param s : C solution to begin algorithm with
+ * @return Solution object : the best solution found
+ */
     C* hillClimberBestImprovement(int nbEvaluation, C* s = NULL) {
         int nbEval = 0;
 
@@ -196,7 +182,7 @@ public:
                 scores.push_back(r);
             }
 
-            // TODO check if it's possible to avoid double loop for BinaryCombinatorySolution
+            // TODO check if it's possible to avoid double loop for BinaryCombinatorySolution type
             for (int i = 0; i < sol->getSize(); ++i) {
 
                 for (int j = 0; j < sol->getSize(); ++j) {
@@ -222,41 +208,18 @@ public:
         return sol;
     }
 
+public:
 
     /**
-     * Iterated local search implementation
-     *
-     * @param nbEvaluation : number of iteration for ILS
-     * @param nbHcIteration : number of iteration for each HC first improvement
-     * @param nbPerturbation : number of element permute to create new solution
-     * @return the best solution found
+     * Initialization of context
+     * @param problem_type : 'false' specify minimizing problem and 'true' maximizing
+     * @param f : objective function(s)
+     * @param s_size : size of problem solution
      */
-    C* iteratedLocalSearch(int nbEvaluation, int nbHcIteration, int nbPerturbation) {
-        int nbEval = 0;
-
-        C *s;
-        C *best = new C(this->size);
-
-        do{
-            s = C::copy(best);
-            s->swapIndex(nbPerturbation);
-
-            C *n = this->hillClimberFirstImprovement(nbHcIteration, s);
-
-            if(this->checkSolution(best, n)){
-                best = C::copy(n);
-                delete n;
-            }
-
-            cout << "ILS " << ((double)nbEval*100.0)/nbEvaluation << "%" << endl;
-
-            nbEval++;
-
-        }while (nbEvaluation > nbEval);
-
-        cout << "100.000%" << endl;
-
-        return best;
+    Heuristics(bool problem_type, vector<Fitness>& funcs, int size) {
+        this->funcs = funcs;
+        this->size = size;
+        this->problem_type = problem_type;
     }
 };
 

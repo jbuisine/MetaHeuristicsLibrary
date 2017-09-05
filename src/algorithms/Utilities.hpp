@@ -3,7 +3,7 @@
 //
 
 
-#include <stdio.h>
+#include <cstdio>
 
 #include <vector>
 #include <iostream>
@@ -11,12 +11,6 @@
 
 using namespace std;
 
-/**
-* Method used for check if solution already exists into a set of solution
-* @param sols : set of all solutions
-* @param s : solution to check
-* @return boolean : True if solution exists, otherwise False
-*/
 template<typename T>
 class Utilities{
 
@@ -54,16 +48,5 @@ public:
             }
         }
         return true;
-    }
-
-    /**
-     * Method which returns a random double of an interval
-     *
-     * @param i0 : first part of interval
-     * @param i1 : second part of interval
-     * @return
-     */
-    static double randInterval(double i0, double i1){
-        return i0 + (i1 - i0) * rand() / ((double) RAND_MAX);
     }
 };

@@ -2,8 +2,6 @@
 // Created by Jérôme BUISINE on 10/07/2017.
 //
 
-#include "../solutions/CombinatorySolution.hpp"
-#include "../solutions/BinaryCombinatorySolution.hpp"
 #include "Heuristics.hpp"
 #include <algorithm>
 
@@ -56,7 +54,7 @@ public:
      * @param alpha : constant defined to decrease temperature (typical choices are between 0.8 & 0.99) 
      * @return
      */
-    C* SimulatedAnnealingSimple(int nbEvaluation, double temperature, double minTemperature, double alpha){
+    C* run(int nbEvaluation, double temperature, double minTemperature, double alpha){
 
         // Best solution to return
         auto *best = new C(this->size);
@@ -72,7 +70,7 @@ public:
                 double ap = acceptanceProbability(best, neighbor, temperature);
 
                 // TODO move this util function into another util class (template is not necessary)
-                double r = Utilities<C>::randInterval(0, 1);
+                double r = Utils::randInterval(0, 1);
 
                 if(ap > r){
                     delete best;

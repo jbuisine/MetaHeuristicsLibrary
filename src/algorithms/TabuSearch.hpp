@@ -80,7 +80,7 @@ public:
      * @param nbPerturbation : number of elements permuted into a solution at each movement
      * @return
      */
-    C* tabuSearchSimple(int nbEvaluation, int nbMovement, int nbPerturbation){
+    C* runStrongMemory(int nbEvaluation, int nbMovement, int nbPerturbation){
 
         // Best solution to return
         C *best = new C(this->size);
@@ -159,7 +159,7 @@ public:
      * @param tabuCounter : number of times a movement is defined as tabu
      * @return
      */
-    C* tabuSearchCounter(int nbEvaluation, int nbMovement, int nbPerturbation, int tabuCounter){
+    C* runAdaptableMemory(int nbEvaluation, int nbMovement, int nbPerturbation, int tabuCounter){
 
         // Best solution to return
         C *best = new C(this->size);
