@@ -8,6 +8,8 @@
 template<typename C>
 class IteratedLocal : public Heuristics<C> {
 
+    typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
+
 public:
 
     /**
@@ -23,11 +25,12 @@ public:
      * Iterated local search implementation
      *
      * @param nbEvaluation : number of iteration for ILS
-     * @param nbHcIteration : number of iteration for each HC first improvement
      * @param nbPerturbation : number of element permute to create new solution
+     * @param localSearch : Local search heuristics chosen
+     * @param nbIterationLocal : number iteration for the local search
      * @return the best solution found
      */
-    C* run(int nbEvaluation, int nbHcIteration, int nbPerturbation) {
+    C* run(int nbEvaluation, int nbPerturbation, Local localSearch, int nbIterationLocal) {
         int nbEval = 0;
 
         C *s;
@@ -37,7 +40,7 @@ public:
             s = C::copy(best);
             s->swapIndex(nbPerturbation);
 
-            C *n = this->hillClimberFirstImprovement(nbHcIteration, s);
+            C *n = localSearch(nbIterationLocal, this, s);
 
             if(this->checkSolution(best, n)){
                 best = C::copy(n);

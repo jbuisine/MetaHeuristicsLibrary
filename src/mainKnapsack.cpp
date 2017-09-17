@@ -6,6 +6,7 @@
 #include "algorithms/TabuSearch.hpp"
 #include "algorithms/SimulatedAnnealing.hpp"
 #include "algorithms/IteratedLocal.hpp"
+#include "algorithms/localsearch/LocalSearch.hpp"
 #include <fstream>
 #include <sstream>
 
@@ -62,7 +63,7 @@ void mainILS() {
 
     auto * ils = new IteratedLocal<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int>* s = ils->run(ILS_ITERATION, HC_ITERATION, NB_PERTURBATION);
+    BinaryCombinatorySolution<int>* s = ils->run(ILS_ITERATION, NB_PERTURBATION, LocalSearch<BinaryCombinatorySolution>::hillClimberBestImprovement, HC_ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
