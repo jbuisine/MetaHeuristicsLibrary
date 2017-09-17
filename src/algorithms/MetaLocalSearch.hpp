@@ -6,7 +6,7 @@
 #include <algorithm>
 
 template<typename C>
-class IteratedLocal : public Heuristics<C> {
+class MetaLocalSearch : public Heuristics<C> {
 
     typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
 
@@ -18,7 +18,7 @@ public:
      * @param f : objective function(s)
      * @param s_size : size of problem solution
      */
-    IteratedLocal(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
+    MetaLocalSearch(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
 
 
     /**
@@ -30,7 +30,7 @@ public:
      * @param nbIterationLocal : number iteration for the local search
      * @return the best solution found
      */
-    C* run(int nbEvaluation, int nbPerturbation, Local localSearch, int nbIterationLocal) {
+    C* runILS(int nbEvaluation, int nbPerturbation, Local localSearch, int nbIterationLocal) {
         int nbEval = 0;
 
         C *s;
@@ -48,6 +48,40 @@ public:
             }
 
             cout << "ILS " << ((double)nbEval*100.0)/nbEvaluation << "%" << endl;
+
+            nbEval++;
+
+        }while (nbEvaluation > nbEval);
+
+        cout << "100.000%" << endl;
+
+        return best;
+    }
+
+    /**
+     * Multi start local search implementation
+     *
+     * @param nbEvaluation : number of iteration for multi start
+     * @param localSearch : Local search heuristics chosen
+     * @param nbIterationLocal : number iteration for the local search
+     * @return the best solution found
+     */
+    C* runMultiStart(int nbEvaluation, Local localSearch, int nbIterationLocal) {
+        int nbEval = 0;
+
+        C *best = new C(this->size);
+
+        do{
+            C s = new C(this->size);
+
+            C *n = localSearch(nbIterationLocal, this, s);
+
+            if(this->checkSolution(best, n)){
+                best = C::copy(n);
+                delete n;
+            }
+
+            cout << "Multi start " << ((double)nbEval*100.0)/nbEvaluation << "%" << endl;
 
             nbEval++;
 

@@ -5,7 +5,7 @@
 #include "algorithms/Heuristics.hpp"
 #include "algorithms/TabuSearch.hpp"
 #include "algorithms/SimulatedAnnealing.hpp"
-#include "algorithms/IteratedLocal.hpp"
+#include "algorithms/MetaLocalSearch.hpp"
 #include "algorithms/localsearch/LocalSearch.hpp"
 #include <fstream>
 #include <sstream>
@@ -61,9 +61,11 @@ void mainILS() {
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    auto * ils = new IteratedLocal<BinaryCombinatorySolution<int>>(true, f, nbElements);
+    auto * ils = new MetaLocalSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int>* s = ils->run(ILS_ITERATION, NB_PERTURBATION, LocalSearch<BinaryCombinatorySolution>::hillClimberBestImprovement, HC_ITERATION);
+    BinaryCombinatorySolution<int>* s = ils->runILS(ILS_ITERATION, NB_PERTURBATION,
+                                                    LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
+                                                    HC_ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
@@ -211,8 +213,8 @@ int main() {
 
     loadKnapsackInfo("./../resources/knapsack/ks_1000.txt");
 
-    //mainILS();
-    mainSA();
+    mainILS();
+    //mainSA();
 
     return 0;
 }

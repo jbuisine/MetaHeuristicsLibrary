@@ -53,6 +53,7 @@ protected:
         return solutions;
     }
 
+public:
 
     /**
       * Method which check the solution dominance
@@ -101,8 +102,6 @@ protected:
 
         return counter == this->funcs.size();
     }
-
-public:
 
     /**
      * Initialization of context
