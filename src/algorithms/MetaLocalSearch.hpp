@@ -33,14 +33,14 @@ public:
     C* runILS(int nbEvaluation, int nbPerturbation, Local localSearch, int nbIterationLocal) {
         int nbEval = 0;
 
-        C *s;
-        auto *best = new C(this->size);
+        C* s;
+        auto* best = new C(this->size);
 
         do{
             s = C::copy(best);
             s->swapIndex(nbPerturbation);
 
-            C *n = localSearch(nbIterationLocal, this, s);
+            C* n = localSearch(nbIterationLocal, this, s);
 
             if(this->checkSolution(best, n)){
                 best = C::copy(n);
@@ -79,7 +79,7 @@ public:
             for (int i = 0; i < neighborHood->size(); ++i) {
 
                 // Local search for improvement
-                C *s = localSearch(nbIterationLocal, this, neighborHood->at(i));
+                C* s = localSearch(nbIterationLocal, this, neighborHood->at(i));
 
                 if(this->checkSolution(best, s)){
                     best = C::copy(neighborHood->at(i));
@@ -104,12 +104,12 @@ public:
     C* runMultiStart(int nbEvaluation, Local localSearch, int nbIterationLocal) {
         int nbEval = 0;
 
-        auto *best = new C(this->size);
+        auto* best = new C(this->size);
 
         do{
-            C s = new C(this->size);
+            auto* s = new C(this->size);
 
-            C *n = localSearch(nbIterationLocal, this, s);
+            C* n = localSearch(nbIterationLocal, this, s);
 
             if(this->checkSolution(best, n)){
                 best = C::copy(n);
@@ -140,13 +140,13 @@ public:
         int nbEval = 0;
         int k = 1;
 
-        auto *best = new C(this->size);
+        auto* best = new C(this->size);
 
         do{
-            C *s = C::copy(best);
+            C* s = C::copy(best);
             s->swapIndex(k);
 
-            C *n = localSearch(nbIterationLocal, this, s);
+            C* n = localSearch(nbIterationLocal, this, s);
 
             if(this->checkSolution(best, n)){
                 best = C::copy(n);
@@ -184,13 +184,13 @@ public:
         int nbEval = 0;
         int k = 1;
 
-        auto *best = new C(this->size);
+        auto* best = new C(this->size);
 
         do{
-            C *s = C::copy(best);
+            C* s = C::copy(best);
             s->swapIndex(k);
 
-            C *n = runDVN(s, localSearch, nbIterationLocal);
+            C* n = runDVN(s, localSearch, nbIterationLocal);
 
             if(this->checkSolution(best, n)){
                 best = C::copy(n);
@@ -226,10 +226,10 @@ public:
         int nbEval = 0;
         int k = 1;
 
-        auto *best = new C(this->size);
+        auto* best = new C(this->size);
 
         do{
-            C *s = C::copy(best);
+            C* s = C::copy(best);
             s->swapIndex(k);
 
             if(this->checkSolution(best, s)){

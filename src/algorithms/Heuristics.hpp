@@ -15,44 +15,6 @@
 template<typename C>
 class Heuristics {
 
-protected:
-    /**
-     * 'false' specify minimizing problem and 'true' maximizing
-     */
-    bool problem_type;
-
-    vector<Fitness> funcs;
-
-    int size;
-
-    /**
-     * Method used for getting all non dominated solutions from set of solutions
-     *
-     * @param sols : the set of solutions
-     * @return solutions : new set of non dominated solutions
-     */
-    vector<C*>* getNonDominatedSols(vector<C*>* sols) {
-
-        vector<C*>* solutions = new vector<C>();
-
-        for (int i = 0; i < sols->size(); ++i) {
-
-            vector<double> scores;
-
-            // Store scores of i solution to avoid redundant compute statements
-            for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](sols->at(i)));
-
-            for (int j = 0; j < sols->size(); ++j) {
-
-                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols->at(i)))
-                    solutions->push_back(sols[i]);
-            }
-        }
-
-        return solutions;
-    }
-
 public:
 
     /**
@@ -125,6 +87,44 @@ public:
 
     vector<Fitness> getFunctions(){
         return funcs;
+    }
+
+protected:
+    /**
+     * 'false' specify minimizing problem and 'true' maximizing
+     */
+    bool problem_type;
+
+    vector<Fitness> funcs;
+
+    int size;
+
+    /**
+     * Method used for getting all non dominated solutions from set of solutions
+     *
+     * @param sols : the set of solutions
+     * @return solutions : new set of non dominated solutions
+     */
+    vector<C*>* getNonDominatedSols(vector<C*>* sols) {
+
+        vector<C*>* solutions = new vector<C>();
+
+        for (int i = 0; i < sols->size(); ++i) {
+
+            vector<double> scores;
+
+            // Store scores of i solution to avoid redundant compute statements
+            for (int j = 0; j < this->funcs.size(); ++j)
+                scores.push_back(this->funcs[j](sols->at(i)));
+
+            for (int j = 0; j < sols->size(); ++j) {
+
+                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols->at(i)))
+                    solutions->push_back(sols[i]);
+            }
+        }
+
+        return solutions;
     }
 };
 
