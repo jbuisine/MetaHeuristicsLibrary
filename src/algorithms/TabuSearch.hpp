@@ -10,59 +10,6 @@
 template<typename C>
 class TabuSearch : public Heuristics<C> {
 
-private:
-
-    struct TabuMovement{
-        C* t;
-        C* s;
-    };
-
-    struct TabuMovementCounter{
-        C* t;
-        C* s;
-        int counter;
-    };
-
-    /**
-     * Method which checks if movement is defined as tabu
-     * @param movements : tabu list of movement
-     * @param t : movement t
-     * @param s : movement s
-     * @return true if movement is tabu otherwise false
-     */
-    bool checkMovementExists(vector<TabuMovement*>* movements, C* t, C* s){
-
-        for (int i = 0; i < movements->size(); ++i) {
-            if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * Method which checks if movement is defined as tabu and decrease tabu counter if it is
-     * @param movements : tabu list of movement
-     * @param t : movement t
-     * @param s : movement s
-     * @return true if movement is tabu otherwise false
-     */
-    bool checkMovementCounterExists(vector<TabuMovementCounter*>* movements, C* s, C* t, int tabuCounter){
-        for (int i = 0; i < movements->size(); ++i) {
-            if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
-                movements->at(i)->counter--;
-
-                if(movements->at(i)->counter == 0){
-                    movements->at(i)->counter = tabuCounter;
-                    return true;
-                }
-            }
-        }
-
-        return false;
-    }
-
 public:
 
     /**
@@ -83,10 +30,10 @@ public:
     C* runStrongMemory(int nbEvaluation, int nbMovement, int nbPerturbation){
 
         // Best solution to return
-        C *best = new C(this->size);
+        auto* best = new C(this->size);
 
         // Variable used to store best solution of each iteration
-        C *s = C::copy(best);
+        C* s = C::copy(best);
 
         vector<TabuMovement*>* tabuList = new vector<TabuMovement*>();
 
@@ -162,7 +109,7 @@ public:
     C* runAdaptableMemory(int nbEvaluation, int nbMovement, int nbPerturbation, int tabuCounter){
 
         // Best solution to return
-        C *best = new C(this->size);
+        C* best = new C(this->size);
 
         // Variable used to store best solution of each iteration
         C* s = C::copy(best);
@@ -210,7 +157,7 @@ public:
             }
 
             // 4. Mark as tabu this movement
-            TabuMovementCounter* mov = new TabuMovementCounter;
+            auto* mov = new TabuMovementCounter;
 
             mov->t = t;
             mov->s = s;
@@ -229,4 +176,58 @@ public:
 
         return best;
     }
+
+private:
+
+    struct TabuMovement{
+        C* t;
+        C* s;
+    };
+
+    struct TabuMovementCounter{
+        C* t;
+        C* s;
+        int counter;
+    };
+
+    /**
+     * Method which checks if movement is defined as tabu
+     * @param movements : tabu list of movement
+     * @param t : movement t
+     * @param s : movement s
+     * @return true if movement is tabu otherwise false
+     */
+    bool checkMovementExists(vector<TabuMovement*>* movements, C* t, C* s){
+
+        for (int i = 0; i < movements->size(); ++i) {
+            if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Method which checks if movement is defined as tabu and decrease tabu counter if it is
+     * @param movements : tabu list of movement
+     * @param t : movement t
+     * @param s : movement s
+     * @return true if movement is tabu otherwise false
+     */
+    bool checkMovementCounterExists(vector<TabuMovementCounter*>* movements, C* s, C* t, int tabuCounter){
+        for (int i = 0; i < movements->size(); ++i) {
+            if(Utilities<C>::sameSolution(movements->at(i)->t, t) && Utilities<C>::sameSolution(movements->at(i)->s, s)){
+                movements->at(i)->counter--;
+
+                if(movements->at(i)->counter == 0){
+                    movements->at(i)->counter = tabuCounter;
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
 };

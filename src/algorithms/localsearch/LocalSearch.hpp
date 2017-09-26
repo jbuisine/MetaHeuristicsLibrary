@@ -28,7 +28,7 @@ public:
         int size = heuristics->getProblemSize();
         vector<Fitness> funcs = heuristics->getFunctions();
 
-        C *sol;
+        C* sol;
 
         // Getting existing solution pass as parameter
         if(s == NULL)
@@ -79,12 +79,12 @@ public:
      * @param s : C solution to begin algorithm with
      * @return Solution object : the best solution found
      */
-    static C* hillClimberFirstImprovement(int nbEvaluation, Heuristics<C> *heuristics, C *s = NULL) {
+    static C* hillClimberFirstImprovement(int nbEvaluation, Heuristics<C>* heuristics, C* s = NULL) {
         int nbEval = 0;
         int size = heuristics->getProblemSize();
         vector<Fitness> funcs = heuristics->getFunctions();
 
-        C *sol;
+        C* sol;
 
         if(s == NULL)
             sol = new C(size);
