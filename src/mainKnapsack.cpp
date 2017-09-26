@@ -48,24 +48,26 @@ double compute (long ptrToParam) {
 
 
 /**
- * Iterated local search example
+ * Local search example
  */
-void mainILS() {
+void mainLS() {
 
     const int ILS_ITERATION = 1000;
     const int HC_ITERATION = 100;
     const int NB_PERTURBATION = 50;
+    const int K_MAX = 100;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    auto * ils = new MetaLocalSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
+    auto * ls = new MetaLocalSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int>* s = ils->runILS(ILS_ITERATION, NB_PERTURBATION,
-                                                    LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
-                                                    HC_ITERATION);
+    BinaryCombinatorySolution<int>* s = ls->runSVNBase(ILS_ITERATION,
+                                                       K_MAX,
+                                                       LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
+                                                       HC_ITERATION);
 
     cout << "Best solution found so far : ";
     s->displaySolution();
@@ -209,11 +211,11 @@ void loadKnapsackInfo(string path){
  */
 int main() {
 
-    srand((unsigned)time(NULL));
+    srand(time(0));
 
     loadKnapsackInfo("./../resources/knapsack/ks_1000.txt");
 
-    mainILS();
+    mainLS();
     //mainSA();
 
     return 0;
