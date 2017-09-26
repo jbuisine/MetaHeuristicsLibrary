@@ -5,7 +5,8 @@
 #include "algorithms/Heuristics.hpp"
 #include "algorithms/TabuSearch.hpp"
 #include "algorithms/SimulatedAnnealing.hpp"
-#include "algorithms/IteratedLocal.hpp"
+#include "algorithms/MetaLocalSearch.hpp"
+#include "algorithms/localsearch/LocalSearch.hpp"
 #include <fstream>
 #include <sstream>
 
@@ -47,24 +48,28 @@ double compute (long ptrToParam) {
 
 
 /**
- * Iterated local search example
+ * Local search example
  */
-void mainILS() {
+void mainLS() {
 
     const int ILS_ITERATION = 1000;
     const int HC_ITERATION = 100;
     const int NB_PERTURBATION = 50;
+    const int K_MAX = 100;
 
     time_t start = time(0);
 
     vector<Fitness> f;
     f.push_back((Fitness)compute);
 
-    auto * ils = new IteratedLocal<BinaryCombinatorySolution<int>>(true, f, nbElements);
+    auto * ls = new MetaLocalSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int>* s = ils->run(ILS_ITERATION, HC_ITERATION, NB_PERTURBATION);
+    BinaryCombinatorySolution<int>* s = ls->runSVNBase(ILS_ITERATION,
+                                                       K_MAX,
+                                                       LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
+                                                       HC_ITERATION);
 
-    cout << "Best solution found so far : ";
+    cout << "Best solution found so far SVN Base : ";
     s->displaySolution();
     cout << endl;
     cout << "Score of ";
@@ -93,7 +98,7 @@ void mainTSSimple() {
 
     auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int> *s = h->runStrongMemory(TSS_ITERATION, NB_MOVEMENT, NB_PERTURBATION);
+    BinaryCombinatorySolution<int>* s = h->runStrongMemory(TSS_ITERATION, NB_MOVEMENT, NB_PERTURBATION);
 
     cout << "Best solution found so far for Tabu search simple : ";
     s->displaySolution();
@@ -124,7 +129,7 @@ void mainTSCounter() {
 
     auto *h = new TabuSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int> *s = h->runAdaptableMemory(TABU_ITERATION, NB_MOVEMENT, NB_PERTURBATION,
+    BinaryCombinatorySolution<int>* s = h->runAdaptableMemory(TABU_ITERATION, NB_MOVEMENT, NB_PERTURBATION,
                                                               TABU_COUNTER);
 
     cout << "Best solution found so far for Tabu search with counter : ";
@@ -156,7 +161,7 @@ void mainSA() {
 
     auto *sa = new SimulatedAnnealing<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int> *s = sa->run(NB_EVAL_PER_TEMP, TEMPERATURE, MIN_TEMPERATURE, DECREASE_FACTOR);
+    BinaryCombinatorySolution<int>* s = sa->run(NB_EVAL_PER_TEMP, TEMPERATURE, MIN_TEMPERATURE, DECREASE_FACTOR);
 
     cout << "Best solution found so far for Simulated Annealing search : ";
     s->displaySolution();
@@ -206,11 +211,11 @@ void loadKnapsackInfo(string path){
  */
 int main() {
 
-    srand((unsigned)time(NULL));
+    srand(time(0));
 
     loadKnapsackInfo("./../resources/knapsack/ks_1000.txt");
 
-    //mainILS();
+    mainLS();
     mainSA();
 
     return 0;
