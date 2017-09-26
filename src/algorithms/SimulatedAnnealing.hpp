@@ -4,6 +4,7 @@
 
 #include "Heuristics.hpp"
 #include <algorithm>
+#include <cmath>
 
 template<typename C>
 class SimulatedAnnealing : public Heuristics<C> {
@@ -17,7 +18,7 @@ private:
      * @param temperature : current temperature
      * @return the acceptance probability
      */
-    double acceptanceProbability(C *o, C *n, double temperature){
+    double acceptanceProbability(C* o, C* n, double temperature){
 
         if(this->checkSolution(o, n)){
             return 1.0;
@@ -27,10 +28,12 @@ private:
 
         // Getting sum of acceptance probability for each criterion
         for(int i = 0; i < this->funcs.size(); i++){
-            if(this->problem_type)
+            if(this->problem_type){
                 ap += exp((this->funcs[i]((long)n) - this->funcs[i]((long)o))/temperature);
-            else
+            }
+            else{
                 ap += exp(-(this->funcs[i]((long)n) - this->funcs[i]((long)o))/temperature);
+            }
         }
 
         return ap / this->funcs.size();
@@ -57,14 +60,14 @@ public:
     C* run(int nbEvaluation, double temperature, double minTemperature, double alpha){
 
         // Best solution to return
-        auto *best = new C(this->size);
+        auto* best = new C(this->size);
 
         while(temperature > minTemperature){
             int i = 0;
 
             while(i <= nbEvaluation){
 
-                C *neighbor = C::copy(best);
+                C* neighbor = C::copy(best);
                 neighbor->swapIndex(1);
 
                 double ap = acceptanceProbability(best, neighbor, temperature);

@@ -9,7 +9,6 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include <cmath>
 #include <array>
 #include <vector>
 #include <iostream>
@@ -154,7 +153,7 @@ protected:
     * @return boolean : True if solution exists, otherwise False
     */
     bool checkExists(vector<Solution<T>*>* sols, Solution<T>* s) {
-        int t = (int)sols->size();
+        auto t = (int)sols->size();
         for (int i = 0; i < t; ++i) {
 
             //Unavailable for primitive types

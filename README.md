@@ -13,6 +13,10 @@ This project use cMake build tool. If you use an IDE which has cMake, you only h
 
 After that, you can declare your own main.cpp file and use the library. Some main.cpp files will be added as examples.
 
+## Documentation
+
+A documentation page is available [here](https://jeromebuisine.fr/project/heuristics-lib/).
+
 ## Contributors
 
 * [jbuisine](https://github.com/jbuisine)
