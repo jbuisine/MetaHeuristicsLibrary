@@ -2,11 +2,7 @@
 // Created by jbuisine on 09/08/17.
 //
 
-#include "algorithms/Heuristics.hpp"
-#include "algorithms/TabuSearch.hpp"
-#include "algorithms/SimulatedAnnealing.hpp"
-#include "algorithms/MetaLocalSearch.hpp"
-#include "algorithms/localsearch/LocalSearch.hpp"
+#include "metaheuristics.h"
 #include <fstream>
 #include <sstream>
 
