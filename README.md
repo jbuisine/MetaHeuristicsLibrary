@@ -9,9 +9,14 @@ Into this library, for use Heuristic functions you have to declare your own fitn
 
 ## Installation & run
 
-This project use cMake build tool. If you use an IDE which has cMake, you only have to load the project with.
+If you want to contribute, this project use cMake build tool so if you use an IDE which has cMake, you only have to load the project with.
 
-After that, you can declare your own main.cpp file and use the library. Some main.cpp files will be added as examples.
+If you just want to use this library, you can download sources code and import the library just as below :
+
+```c
+#include "metaheuristics.h"
+```
+
 
 ## Documentation
 
