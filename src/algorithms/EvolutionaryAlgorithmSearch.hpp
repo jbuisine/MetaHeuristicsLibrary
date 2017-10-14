@@ -12,6 +12,8 @@
 template<typename C>
 class EvolutionaryAlgorithmSearch : public Heuristics<C> {
 
+typedef C* (Operator)(C* fstSol, C* sndSol = nullptr);
+
 public:
 
     /**
@@ -21,8 +23,6 @@ public:
      * @param s_size : size of problem solution
      */
     EvolutionaryAlgorithmSearch(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
-
-
 };
 
 

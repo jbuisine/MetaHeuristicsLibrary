@@ -13,7 +13,6 @@
 template <typename C>
 class LocalSearch{
 
-
 public:
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
