@@ -6,8 +6,6 @@
 #define METAHEURISTICS_HEURISTICS_H
 
 
-#include "../solutions/CombinatorySolution.hpp"
-#include "../solutions/BinaryCombinatorySolution.hpp"
 #include "../utils/Utils.hpp"
 #include "Utilities.hpp"
 #include <algorithm>

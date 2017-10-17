@@ -5,7 +5,6 @@
 #ifndef METAHEURISTICS_METAHEURISTICS_H
 #define METAHEURISTICS_METAHEURISTICS_H
 
-#include "algorithms/Heuristics.hpp"
 #include "algorithms/TabuSearch.hpp"
 #include "algorithms/SimulatedAnnealing.hpp"
 

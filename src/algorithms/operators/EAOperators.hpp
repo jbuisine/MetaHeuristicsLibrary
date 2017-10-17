@@ -5,9 +5,6 @@
 #ifndef METAHEURISTICS_EAOPERATORS_HPP
 #define METAHEURISTICS_EAOPERATORS_HPP
 
-
-#include <map>
-
 template <typename C>
 class EAOperators {
 
@@ -35,7 +32,7 @@ class EAOperators {
         unsigned int solSize = fstSol->getSize();
 
         // Binary solution case
-        if(dynamic_cast<BinaryCombinatorySolution*>(fstSol) == nullptr){
+        if(dynamic_cast<BinaryCombinatorySolution<int>*>(fstSol) == nullptr){
 
             // Getting information
             unsigned int splitIndex = (rand() % solSize);
@@ -53,7 +50,7 @@ class EAOperators {
 
             return sol;
 
-        }else if(dynamic_cast<CombinatorySolution*>(fstSol) == nullptr){
+        }else if(dynamic_cast<CombinatorySolution<int>*>(fstSol) == nullptr){
 
             // Method which generates two solutions and selected randomly one
 

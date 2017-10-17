@@ -7,7 +7,8 @@
 
 template<typename C>
 class MetaLocalSearch : public Heuristics<C> {
-
+    
+// Type Local search function type
 typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
 
 public:
