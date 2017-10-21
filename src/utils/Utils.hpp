@@ -27,4 +27,10 @@ public:
     static double randInterval(double i0, double i1){
         return i0 + (i1 - i0) * rand() / ((double) RAND_MAX);
     }
+
+    struct Comp{
+        Comp( const vector<int>& v ) : _v(v) {}
+        bool operator ()(int a, int b) { return _v[a] > _v[b]; }
+        const vector<int>& _v;
+    };
 };
