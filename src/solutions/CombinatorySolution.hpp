@@ -98,7 +98,7 @@ public:
      *
      * @return bool
      */
-    Solution<T>* CombinatorySolution::crossover(C *sol) {
+    Solution<T>* crossover(Solution<T>* sol) {
 
         // Method which generates two solutions and selected one randomly
 
@@ -110,8 +110,8 @@ public:
         /***************************************************************/
 
         // Setting child solutions
-        C* fstChild = C::copy(this);
-        C* sndChild = C::copy(sol);
+        CombinatorySolution<T>* fstChild = CombinatorySolution<T>::copy(this);
+        CombinatorySolution<T>* sndChild = CombinatorySolution<T>::copy((CombinatorySolution<T> *) sol);
 
         // Finding crossing region (avoiding array out of bounds)
         int fstRegion = (rand() % (this->size-1)+1);
@@ -127,7 +127,7 @@ public:
         regionsValue.push_back(sndRegionVal);
 
         // Grouping child solution
-        auto children = vector<C*>();
+        auto children = vector<CombinatorySolution<T>*>();
         children.push_back(fstChild);
         children.push_back(sndChild);
 
@@ -142,8 +142,8 @@ public:
 
                 // Swap values
                 int tempVal = child->getArr(fstIndex);
-                child->getArr(fstIndex) = child->getArr(sndIndex);
-                child->getArr(sndIndex) = tempVal;
+                child->setArr(fstIndex, child->getArr(sndIndex));
+                child->setArr(sndIndex, tempVal);
             }
         }
 

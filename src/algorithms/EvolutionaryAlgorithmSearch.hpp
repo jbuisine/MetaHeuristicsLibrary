@@ -53,7 +53,7 @@ public:
         }
 
         // Verifying  if context used one or multiple objective functions
-        if(funcs.size() > 1){
+        if(this->funcs.size() > 1){
             std::cout << "Error : You can't use this EA method with multiple objective context." << std::endl;
             return nullptr;
         }
@@ -63,7 +63,7 @@ public:
         /***********************************************/
 
         // Getting objective function
-        Fitness func = funcs.at(0);
+        Fitness func = this->funcs.at(0);
 
         // Vector of mu parent solutions and scores
         auto parents = new std::vector<C*>(mu);
@@ -111,7 +111,7 @@ public:
             // Initialisation of child solutions
             for(int j(0); j < lambda; j++){
 
-                children->at(j) = new C::copy(parents->at(muIndexes.at(j)));
+                children->at(j) = C::copy(parents->at(muIndexes.at(j)));
                 childrenScores->at(j) = parentsScores->at(muIndexes.at(j));
             }
 
@@ -126,10 +126,10 @@ public:
                 int indexSol = (rand() % children->size());
 
                 // Crossover between current child solution and another chosen randomly
-                children->at(j) = EAOperators::simpleCrossover(children->at(j), children->at(indexSol));
+                children->at(j) = EAOperators<C>::simpleCrossover(children->at(j), children->at(indexSol));
 
                 // Simple mutation of solution
-                children->at(j) = EAOperators::simpleMutation(children->at(j));
+                children->at(j) = EAOperators<C>::simpleMutation(children->at(j));
 
                 // Local search to improve solution
                 children->at(j) = localSearch(nbIterationLocal, this, children->at(j));
@@ -165,7 +165,7 @@ public:
             // Setting best population (mu+lambda) solutions to generate new parents (mu) population
             for(int j(0); j < mu; j++){
 
-                parents->at(j) = new C::copy(population->at(populationIndexes.at(j)));
+                parents->at(j) = C::copy(population->at(populationIndexes.at(j)));
                 parentsScores->at(j) = populationScores->at(populationIndexes.at(j));
             }
 

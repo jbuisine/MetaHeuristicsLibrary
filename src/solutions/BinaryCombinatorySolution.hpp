@@ -98,15 +98,15 @@ public:
      *
      * @return bool
      */
-    Solution<T>* BinaryCombinatorySolution::crossover(C *sol) {
+    Solution<T>* crossover(Solution<T> *sol) {
 
         // Getting information
         unsigned int splitIndex = (rand() % this->size);
 
-        C* child = new C(solSize);
+        Solution<T>* child = new BinaryCombinatorySolution<T>(this->size);
 
         // Setting new binary solution
-        for(int i(0); i < solSize; i++){
+        for(int i(0); i < this->size; i++){
             if(i > splitIndex){
                 child->setArr(i, this->getArr(i));
             }else{

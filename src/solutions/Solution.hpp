@@ -121,7 +121,7 @@ public:
      * @param sol
      * @return new solution generated
      */
-    virtual Solution<T>* crossover(C* sol);
+    virtual Solution<T>* crossover(Solution<T>* sol) = 0;
 
     /**
      * Method used for display solution
