@@ -29,8 +29,8 @@ public:
     }
 
     struct Comp{
-        Comp( const vector<int>& v ) : _v(v) {}
-        bool operator ()(int a, int b) { return _v[a] > _v[b]; }
-        const vector<int>& _v;
+        Comp(vector<double>* v ) : _v(v) {}
+        bool operator ()(double a, double b) { return _v->at(a) > _v->at(b); }
+        vector<double>* _v;
     };
 };

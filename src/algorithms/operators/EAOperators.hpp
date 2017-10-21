@@ -8,6 +8,7 @@
 template <typename C>
 class EAOperators {
 
+public:
     /**
      * Operator which specifies swapping two indexes of QAP solution
      *

@@ -7,6 +7,7 @@
 
 
 #include "Heuristics.hpp"
+#include "operators/EAOperators.hpp"
 
 template<typename C>
 class EvolutionaryAlgorithmSearch : public Heuristics<C> {
@@ -62,7 +63,7 @@ public:
         /***********************************************/
 
         // Getting objective function
-        Fitness* func = funcs.at(0);
+        Fitness func = funcs.at(0);
 
         // Vector of mu parent solutions and scores
         auto parents = new std::vector<C*>(mu);
@@ -70,7 +71,7 @@ public:
 
         // Vector of parents+children solutions for environmental selection
         auto population = new std::vector<C*>(mu+lambda);
-        auto populationScores = new std::vector<C*>(mu+lambda);
+        auto populationScores = new std::vector<double>(mu+lambda);
 
         /**************************************************************/
         /****** 1. mu population initialization and evaluation ********/
@@ -99,13 +100,13 @@ public:
 
             // By default getting lambda best parents solutions indexes
             vector<int> muIndexes;
-            muIndexes.resize(parentsScores.size());
+            muIndexes.resize(parentsScores->size());
 
             for( int j = 0; j < muIndexes.size(); ++j ){
                 muIndexes[j]= j;
             }
 
-            partial_sort(muIndexes.begin(), muIndexes.begin()+lambda, muIndexes.end(), Utils::Comp(parentsScores));
+            std::partial_sort(muIndexes.begin(), muIndexes.begin()+lambda, muIndexes.end(), Utils::Comp(parentsScores));
 
             // Initialisation of child solutions
             for(int j(0); j < lambda; j++){
@@ -131,7 +132,7 @@ public:
                 children->at(j) = EAOperators::simpleMutation(children->at(j));
 
                 // Local search to improve solution
-                children->at(j) = LocalSearch(nbIterationLocal, this, children->at(j));
+                children->at(j) = localSearch(nbIterationLocal, this, children->at(j));
 
                 // Replace score of new child generated
                 childrenScores->at(j) = func((long)children->at(j));
@@ -145,16 +146,16 @@ public:
             populationScores = new std::vector<double>(mu+lambda);
 
             // Merge parents and children into population
-            population.insert(population.end(), parents.begin(), parents.end());
-            population.insert(population.end(), children.begin(), children.end());
+            population->insert(population->end(), parents->begin(), parents->end());
+            population->insert(population->end(), children->begin(), children->end());
 
             // Merge parents and children scores into population scores
-            populationScores.insert(populationScores.end(), parentsScores.begin(), parentsScores.end());
-            populationScores.insert(populationScores.end(), childrenScores.begin(), childrenScores.end());
+            populationScores->insert(populationScores->end(), parentsScores->begin(), parentsScores->end());
+            populationScores->insert(populationScores->end(), childrenScores->begin(), childrenScores->end());
 
             // By default getting best mu solution indexes of population
             vector<int> populationIndexes;
-            populationIndexes.resize(populationScores.size());
+            populationIndexes.resize(populationScores->size());
             for( int j = 0; j < populationIndexes.size(); ++j ){
                 populationIndexes[j]= j;
             }
@@ -173,7 +174,7 @@ public:
         }
 
         // Finally return best solution of parents population
-        int bestIndex = distance(parentsScores, max_element(parentsScores, parentsScores + mu));
+        int bestIndex = (int) distance(parentsScores, max_element(parentsScores, parentsScores + mu));
 
         return parents->at(bestIndex);
     }
