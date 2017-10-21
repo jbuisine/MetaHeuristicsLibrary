@@ -71,6 +71,14 @@ public:
         return sols;
     }
 
+    /**
+     * Neighbor of specific index position
+     *
+     * @param sol
+     * @param i
+     * @param j
+     * @return
+     */
     Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) {
 
         Solution<T> *newest = (Solution<T>*)CombinatorySolution<T>::copy((CombinatorySolution<T>*)sol);
@@ -80,6 +88,77 @@ public:
         newest->setArr(j, old_val);
 
         return newest;
+    }
+
+    /**
+     * Check if to solutions are equivalents
+     *
+     * @param Solution<T> a : Solution A
+     * @param Solution<T> b	: Solution B
+     *
+     * @return bool
+     */
+    Solution<T>* CombinatorySolution::crossover(C *sol) {
+
+        // Method which generates two solutions and selected one randomly
+
+        // Random probability
+        double p = ((double) rand() / (RAND_MAX)) + 1;
+
+        /***************************************************************/
+        /*  Partially Matched Crossover. Buckland (2002, pp. 130-132)  */
+        /***************************************************************/
+
+        // Setting child solutions
+        C* fstChild = C::copy(this);
+        C* sndChild = C::copy(sol);
+
+        // Finding crossing region (avoiding array out of bounds)
+        int fstRegion = (rand() % (this->size-1)+1);
+        int sndRegion = (rand() % (this->size-1)+1);
+
+        // Getting region values
+        std::pair<int, int> fstRegionVal (this->getArr(fstRegion-1), this->getArr(fstRegion));
+        std::pair<int, int> sndRegionVal (sol->getArr(sndRegion-1), sol->getArr(sndRegion));
+
+        // Grouping regions value
+        auto regionsValue = vector<pair<int, int>>();
+        regionsValue.push_back(fstRegionVal);
+        regionsValue.push_back(sndRegionVal);
+
+        // Grouping child solution
+        auto children = vector<C*>();
+        children.push_back(fstChild);
+        children.push_back(sndChild);
+
+        // Iterations : example -> fstRegionVal(1) value swap with fstRegionVal(2) value index for each child :
+        for(auto region : regionsValue){
+
+            for(auto child : children){
+
+                // Retrieve index of region value
+                int fstIndex = std::distance(child, std::find(child, child + this->size, region.first));
+                int sndIndex = std::distance(child, std::find(child, child + this->size, region.second));
+
+                // Swap values
+                int tempVal = child->getArr(fstIndex);
+                child->getArr(fstIndex) = child->getArr(sndIndex);
+                child->getArr(sndIndex) = tempVal;
+            }
+        }
+
+        // Return child solution generated randomly
+        if(p > 0.5){
+
+            delete sndChild;
+
+            return fstChild;
+        } else{
+
+            delete fstChild;
+
+            return sndChild;
+        }
     }
 };
 

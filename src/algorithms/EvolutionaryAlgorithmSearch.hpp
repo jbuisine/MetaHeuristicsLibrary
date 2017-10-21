@@ -28,6 +28,17 @@ public:
      */
     EvolutionaryAlgorithmSearch(bool problem_type, vector<Fitness>& funcs, int size) : Heuristics<C>(problem_type, funcs, size){}
 
+    /**
+     * Simple Evolutionary algorithm implementation
+     *
+     * @param mu : Number of parents solutions
+     * @param lambda : Number of children solutions
+     * @param iteration : Number of iterations
+     * @param localSearch : Local search expected (Local type)
+     * @param nbIterationLocal : Iteration for Local search
+     * @param anOperator : Operator used like mutation crossover
+     * @return
+     */
     C* runSimple(int mu, int lambda, int iteration, Local localSearch, int nbIterationLocal, Operator anOperator){
 
     }

@@ -105,8 +105,23 @@ public:
      */
     virtual vector<Solution<T>*>* getNeighbors() = 0;
 
-
+    /**
+     * Neighbor of specific index position
+     *
+     * @param sol
+     * @param i
+     * @param j
+     * @return
+     */
     virtual Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) = 0;
+
+    /**
+     * Generate new solution using crossove
+     *
+     * @param sol
+     * @return new solution generated
+     */
+    virtual Solution<T>* crossover(C* sol);
 
     /**
      * Method used for display solution
