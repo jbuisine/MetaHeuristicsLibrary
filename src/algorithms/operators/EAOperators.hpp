@@ -16,7 +16,7 @@ class EAOperators {
      * @param fstSol
      * @return New solution generated
      */
-    static C* simpleMutation(C* fstSol){
+    static C* simpleMutation(C* fstSol, C* sndSol = nullptr){
         return C::copy(fstSol->swapIndex(1));
     }
 

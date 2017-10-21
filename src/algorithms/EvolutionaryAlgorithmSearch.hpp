@@ -36,10 +36,9 @@ public:
      * @param iteration : Number of iterations
      * @param localSearch : Local search expected (Local type)
      * @param nbIterationLocal : Iteration for Local search
-     * @param anOperator : Operator used like mutation crossover
      * @return
      */
-    C* runSimple(int mu, int lambda, int iteration, Local localSearch, int nbIterationLocal, Operator anOperator){
+    C* runSimple(int mu, int lambda, int iteration, Local localSearch, int nbIterationLocal){
 
 
         /***********************************************/
@@ -69,9 +68,9 @@ public:
         auto parents = new std::vector<C*>(mu);
         auto parentsScores = new std::vector<double>(mu);
 
-        // Vector of children solutions
-        auto children = new std::vector<C*>(lambda);
-        auto childrenScores = new std::vector<C*>(lambda);
+        // Vector of parents+children solutions for environmental selection
+        auto population = new std::vector<C*>(mu+lambda);
+        auto populationScores = new std::vector<C*>(mu+lambda);
 
         /**************************************************************/
         /****** 1. mu population initialization and evaluation ********/
@@ -85,34 +84,98 @@ public:
             parents->at(i)->fillWithRandomCombatorySolution();
 
             // Getting solution score
-            parentsScores->at(i) = func(parents->at(i));
+            parentsScores->at(i) = func((long)parents->at(i));
         }
 
-        /******************************************************************/
-        /****** 1. lambda initialization using parental selection  ********/
-        /******************************************************************/
+        for (int i(0); i < iteration; ++i) {
 
-        // By default getting best parents solutions indexes
-        vector<int> muIndexes;
-        muIndexes.resize(parentsScores.size());
-        for( int i= 0; i < muIndexes.size(); ++i ){
-            muIndexes[i]= i;
+            /******************************************************************/
+            /****** 1. lambda initialization using parental selection  ********/
+            /******************************************************************/
+
+            // Vector of children solutions
+            auto children = new std::vector<C*>(lambda);
+            auto childrenScores = new std::vector<C*>(lambda);
+
+            // By default getting lambda best parents solutions indexes
+            vector<int> muIndexes;
+            muIndexes.resize(parentsScores.size());
+
+            for( int j = 0; j < muIndexes.size(); ++j ){
+                muIndexes[j]= j;
+            }
+
+            partial_sort(muIndexes.begin(), muIndexes.begin()+lambda, muIndexes.end(), Utils::Comp(parentsScores));
+
+            // Initialisation of child solutions
+            for(int j(0); j < lambda; j++){
+
+                children->at(j) = new C::copy(parents->at(muIndexes.at(j)));
+                childrenScores->at(j) = parentsScores->at(muIndexes.at(j));
+            }
+
+            /******************************************************************************************/
+            /****** 2. Improvement part of children using crossover, mutation and LocalSearch  ********/
+            /******************************************************************************************/
+
+            // Perform improvement for each child (currently best parents)
+            for(int j(0); i < children->size(); j++){
+
+                // Getting index sol used for crossover
+                int indexSol = (rand() % children->size());
+
+                // Crossover between current child solution and another chosen randomly
+                children->at(j) = EAOperators::simpleCrossover(children->at(j), children->at(indexSol));
+
+                // Simple mutation of solution
+                children->at(j) = EAOperators::simpleMutation(children->at(j));
+
+                // Local search to improve solution
+                children->at(j) = LocalSearch(nbIterationLocal, this, children->at(j));
+
+                // Replace score of new child generated
+                childrenScores->at(j) = func((long)children->at(j));
+            }
+
+            /**********************************************************************/
+            /****** 3. Environmental selection to create new mu population ********/
+            /**********************************************************************/
+
+            population = new std::vector<C*>(mu+lambda);
+            populationScores = new std::vector<double>(mu+lambda);
+
+            // Merge parents and children into population
+            population.insert(population.end(), parents.begin(), parents.end());
+            population.insert(population.end(), children.begin(), children.end());
+
+            // Merge parents and children scores into population scores
+            populationScores.insert(populationScores.end(), parentsScores.begin(), parentsScores.end());
+            populationScores.insert(populationScores.end(), childrenScores.begin(), childrenScores.end());
+
+            // By default getting best mu solution indexes of population
+            vector<int> populationIndexes;
+            populationIndexes.resize(populationScores.size());
+            for( int j = 0; j < populationIndexes.size(); ++j ){
+                populationIndexes[j]= j;
+            }
+
+            partial_sort(populationIndexes.begin(), populationIndexes.begin()+mu, populationIndexes.end(), Utils::Comp(populationScores));
+
+            // Setting best population (mu+lambda) solutions to generate new parents (mu) population
+            for(int j(0); j < mu; j++){
+
+                parents->at(j) = new C::copy(population->at(populationIndexes.at(j)));
+                parentsScores->at(j) = populationScores->at(populationIndexes.at(j));
+            }
+
+            delete children;
+            delete childrenScores;
         }
 
-        partial_sort( muIndexes.begin(), muIndexes.begin()+lambda, muIndexes.end(), Utils::Comp(v) );
+        // Finally return best solution of parents population
+        int bestIndex = distance(parentsScores, max_element(parentsScores, parentsScores + mu));
 
-        // Initialisation of child solutions
-        for(int i(0); i < lambda; i++){
-
-            children->at(i) = new C::copy(parents->at(muIndexes.at(i)));
-            childrenScores->at(i) = parentsScores->at(muIndexes.at(i));
-        }
-
-
-        /******************************************************************************************/
-        /****** 2. Improvement part of children using crossover, mutation and LocalSearch  ********/
-        /******************************************************************************************/
-
+        return parents->at(bestIndex);
     }
 };
 
