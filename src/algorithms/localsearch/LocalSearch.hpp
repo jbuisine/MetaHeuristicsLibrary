@@ -13,7 +13,6 @@
 template <typename C>
 class LocalSearch{
 
-
 public:
     /**
      *  HillClimberBestImprovement implementation with possibility to use multiple objective or single objective scalarizing method
@@ -26,7 +25,7 @@ public:
     static C* hillClimberBestImprovement(int nbEvaluation, Heuristics<C> *heuristics, C* s = NULL) {
         int nbEval = 0;
         int size = heuristics->getProblemSize();
-        vector<Fitness> funcs = heuristics->getFunctions();
+        std::vector<Fitness> funcs = heuristics->getFunctions();
 
         C* sol;
 
@@ -37,13 +36,13 @@ public:
             sol = s;
 
         do{
-            vector<double> scores;
+            auto scores = new std::vector<double>();
 
             // Store scores to avoid redundant compute statements
-            for (unsigned int j = 0; j < funcs.size(); ++j) {
+            for (int j = 0; j < funcs.size(); ++j) {
                 Fitness fnc = (Fitness) funcs[j];
                 double r = fnc((long)sol);
-                scores.push_back(r);
+                scores->push_back(r);
             }
 
             // Getting neighbor solutions of sol
@@ -59,11 +58,13 @@ public:
 
                 if(nbEvaluation <= nbEval){
                     delete neighbors;
+                    delete scores;
                     goto end;
                 }
             }
 
             delete neighbors;
+            delete scores;
 
         }while (nbEvaluation > nbEval);
 
@@ -92,13 +93,13 @@ public:
             sol = s;
 
         do{
-            vector<double> scores;
+            auto scores = new std::vector<double>();
 
             // Store scores to avoid redundant compute statements
-            for (unsigned int j = 0; j < funcs.size(); ++j) {
+            for (int j = 0; j < funcs.size(); ++j) {
                 Fitness fnc = (Fitness) funcs[j];
                 double r = fnc((long)sol);
-                scores.push_back(r);
+                scores->push_back(r);
             }
 
             // TODO check if it's possible to avoid double loop for BinaryCombinatorySolution type
@@ -111,15 +112,22 @@ public:
                     // Break if new solution is better
                     if(heuristics->checkSolution(scores, newest)) {
                         sol->copyArr(newest->getArr(), size);
+                        delete newest;
                         break;
                     }
 
                     nbEval++;
 
-                    if(nbEvaluation <= nbEval)
+                    delete newest;
+
+                    if(nbEvaluation <= nbEval){
+                        delete scores;
                         goto end;
+                    }
                 }
             }
+
+            delete scores;
 
         }while (nbEvaluation > nbEval);
 

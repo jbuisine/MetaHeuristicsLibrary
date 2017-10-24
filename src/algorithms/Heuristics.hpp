@@ -6,8 +6,6 @@
 #define METAHEURISTICS_HEURISTICS_H
 
 
-#include "../solutions/CombinatorySolution.hpp"
-#include "../solutions/BinaryCombinatorySolution.hpp"
 #include "../utils/Utils.hpp"
 #include "Utilities.hpp"
 #include <algorithm>
@@ -23,7 +21,7 @@ public:
       * @param n = the new solution
       * @return True if new solution dominate the older
       */
-    bool checkSolution(vector<double>& scores, C* n){
+    bool checkSolution(vector<double>* scores, C* n){
 
         int counter = 0;
 
@@ -32,10 +30,10 @@ public:
         for (int i = 0; i < s; ++i) {
 
             if(this->problem_type){
-                if(funcs[i]((long)n) >= scores[i]) counter++;
+                if(funcs[i]((long)n) >= scores->at(i)) counter++;
             }
             else{
-                if(funcs[i]((long)n) <= scores[i]) counter++;
+                if(funcs[i]((long)n) <= scores->at(i)) counter++;
             }
         }
 
@@ -111,17 +109,19 @@ protected:
 
         for (int i = 0; i < sols->size(); ++i) {
 
-            vector<double> scores;
+            auto scores = new std::vector<double>();
 
             // Store scores of i solution to avoid redundant compute statements
             for (int j = 0; j < this->funcs.size(); ++j)
-                scores.push_back(this->funcs[j](sols->at(i)));
+                scores->push_back(this->funcs[j](sols->at(i)));
 
             for (int j = 0; j < sols->size(); ++j) {
 
-                if(this->checkSolution(scores, sols[j]) && !Utilities<C>::checkExists(solutions, sols->at(i)))
+                if(this->checkSolution(scores, sols->at(j)) && !Utilities<C>::checkExists(solutions, sols->at(i)))
                     solutions->push_back(sols[i]);
             }
+
+            delete scores;
         }
 
         return solutions;

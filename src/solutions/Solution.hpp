@@ -27,20 +27,12 @@ class Solution {
 public:
 
     /**
-    * Constructor used for define a suit of int randomly distributed
+    * Method used for define a suit of int randomly distributed
     * @param this->size : number of element into array solution
     *
-    * Ex:   CombinatorySolution* a = CombinatorySolution::generateRandomeCombatorySolution(100);
-    *
     */
-    void fillWithRandomCombatorySolution() {
+    virtual void fillRandomSolution() = 0;
 
-        for (int i = 0; i < size; ++i) {
-            arr[i] = i;
-        }
-
-        swapIndex(1000);
-    }
     /**
 	* Compy constructor used for setting arr
 	* @param arr : array solution
@@ -105,8 +97,23 @@ public:
      */
     virtual vector<Solution<T>*>* getNeighbors() = 0;
 
-
+    /**
+     * Neighbor of specific index position
+     *
+     * @param sol
+     * @param i
+     * @param j
+     * @return
+     */
     virtual Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) = 0;
+
+    /**
+     * Generate new solution using crossove
+     *
+     * @param sol
+     * @return new solution generated
+     */
+    virtual Solution<T>* crossover(Solution<T>* sol) = 0;
 
     /**
      * Method used for display solution

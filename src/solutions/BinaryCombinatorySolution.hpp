@@ -18,11 +18,21 @@ public:
      */
     BinaryCombinatorySolution(int s) : Solution<T>(s){
 
+        fillRandomSolution();
+    }
+
+    /**
+    * Method used for define a suit of int randomly distributed
+    * @param this->size : number of element into array solution
+    *
+    */
+    void fillRandomSolution() {
+
         for (int i = 0; i < this->size; ++i) {
             this->arr[i] = 0;
         }
 
-        this->swapIndex(1000);
+       this->swapIndex(1000);
     }
 
     /**
@@ -76,12 +86,45 @@ public:
         return sols;
     }
 
+    /**
+     * Method used for check if solution already exists into a set of solution
+     * @param sols : set of all solutions
+     * @param s : solution to check
+     * @return boolean : True if solution exists, otherwise False
+     */
     Solution<T>* getNeighbor(Solution<T>* sol, int i, int j) {
 
         Solution<T> *newest = (Solution<T>*)CombinatorySolution<T>::copy((CombinatorySolution<T>*)sol);
         newest->getArr()[i] = !(bool)newest->getArr()[i];
 
         return newest;
+    }
+
+    /**
+     * Check if to solutions are equivalents
+     *
+     * @param Solution<T> a : Solution A
+     * @param Solution<T> b	: Solution B
+     *
+     * @return bool
+     */
+    Solution<T>* crossover(Solution<T> *sol) {
+
+        // Getting information
+        int splitIndex = (rand() % this->size);
+
+        Solution<T>* child = new BinaryCombinatorySolution<T>(this->size);
+
+        // Setting new binary solution
+        for(int i(0); i < this->size; i++){
+            if(i > splitIndex){
+                child->setArr(i, this->getArr(i));
+            }else{
+                child->setArr(i, sol->getArr(i));
+            }
+        }
+
+        return child;
     }
 };
 
