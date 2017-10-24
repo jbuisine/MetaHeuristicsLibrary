@@ -18,7 +18,10 @@ public:
      * @return New solution generated
      */
     static C* simpleMutation(C* fstSol, C* sndSol = nullptr){
-        return C::copy(fstSol->swapIndex(1));
+
+        fstSol->swapIndex(1);
+
+        return fstSol;
     }
 
     /**
@@ -31,7 +34,7 @@ public:
     static C* simpleCrossover(C* fstSol, C* sndSol){
 
         // Utilisation of crossover defined for each class type
-        return fstSol->crossover(sndSol);
+        return (C*)fstSol->crossover(sndSol);
     }
 };
 

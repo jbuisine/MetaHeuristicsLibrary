@@ -18,11 +18,21 @@ public:
      */
     BinaryCombinatorySolution(int s) : Solution<T>(s){
 
+        fillRandomSolution();
+    }
+
+    /**
+    * Method used for define a suit of int randomly distributed
+    * @param this->size : number of element into array solution
+    *
+    */
+    void fillRandomSolution() {
+
         for (int i = 0; i < this->size; ++i) {
             this->arr[i] = 0;
         }
 
-        this->swapIndex(1000);
+       this->swapIndex(1000);
     }
 
     /**
@@ -101,7 +111,7 @@ public:
     Solution<T>* crossover(Solution<T> *sol) {
 
         // Getting information
-        unsigned int splitIndex = (rand() % this->size);
+        int splitIndex = (rand() % this->size);
 
         Solution<T>* child = new BinaryCombinatorySolution<T>(this->size);
 
