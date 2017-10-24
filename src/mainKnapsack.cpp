@@ -48,7 +48,7 @@ double compute (long ptrToParam) {
  */
 void mainLS() {
 
-    const int ILS_ITERATION = 1000;
+    const int ILS_ITERATION = 10000;
     const int HC_ITERATION = 100;
     const int NB_PERTURBATION = 50;
     const int K_MAX = 100;
@@ -60,9 +60,9 @@ void mainLS() {
 
     auto * ls = new MetaLocalSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
 
-    BinaryCombinatorySolution<int>* s = ls->runSVNBase(ILS_ITERATION,
+    BinaryCombinatorySolution<int>* s = ls->runILS(ILS_ITERATION,
                                                        K_MAX,
-                                                       LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
+                                                       LocalSearch<BinaryCombinatorySolution<int>>::hillClimberFirstImprovement,
                                                        HC_ITERATION);
 
     cout << "Best solution found so far SVN Base : ";
@@ -141,7 +141,7 @@ void mainTSCounter() {
 }
 
 /**
- * Tabu search algorithm with counter memory
+ * Simulated annealing algorithm with counter memory
  */
 void mainSA() {
 
@@ -160,6 +160,43 @@ void mainSA() {
     BinaryCombinatorySolution<int>* s = sa->run(NB_EVAL_PER_TEMP, TEMPERATURE, MIN_TEMPERATURE, DECREASE_FACTOR);
 
     cout << "Best solution found so far for Simulated Annealing search : ";
+    s->displaySolution();
+    cout << endl;
+    cout << "Score of ";
+    cout << compute((long) s) << endl;
+    delete s;
+
+    double seconds_since_start = difftime(time(0), start);
+
+    cout << "Time consumed " << seconds_since_start << " sec." << endl;
+}
+
+/**
+ * EA simple algorithm run
+ */
+void mainEASimple() {
+
+    const int MU_ELEMENT = 100;
+    const int LAMBDA_ELEMENT = 50;
+    const int NB_ITERATION = 1000;
+    const int NB_LOCAL_ITERATION = 100;
+
+    time_t start = time(0);
+
+    vector<Fitness> f;
+    f.push_back((Fitness) compute);
+
+    auto *ea = new EvolutionaryAlgorithmSearch<BinaryCombinatorySolution<int>>(true, f, nbElements);
+
+    BinaryCombinatorySolution<int>* s = ea->runSimple(MU_ELEMENT,
+                                                      LAMBDA_ELEMENT,
+                                                      NB_ITERATION,
+                                                      EAOperators<BinaryCombinatorySolution<int>>::simpleCrossover,
+                                                      EAOperators<BinaryCombinatorySolution<int>>::simpleMutation,
+                                                      LocalSearch<BinaryCombinatorySolution<int>>::hillClimberFirstImprovement,
+                                                      NB_LOCAL_ITERATION);
+
+    cout << "Best solution found so far for EA simple search : ";
     s->displaySolution();
     cout << endl;
     cout << "Score of ";
@@ -207,12 +244,13 @@ void loadKnapsackInfo(string path){
  */
 int main() {
 
-    srand(time(0));
+    srand(10);
 
     loadKnapsackInfo("./../resources/knapsack/ks_1000.txt");
 
-    mainLS();
-    mainSA();
+    //mainLS();
+    //mainSA();
+    mainEASimple();
 
     return 0;
 }

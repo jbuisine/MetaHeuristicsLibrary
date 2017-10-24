@@ -6,9 +6,6 @@
 #include <cstdio>
 #include <vector>
 #include <iostream>
-#include "../solutions/Solution.hpp"
-
-using namespace std;
 
 /**
  * Utils method without links' template

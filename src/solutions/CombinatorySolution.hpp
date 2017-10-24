@@ -5,6 +5,7 @@
 #ifndef METAHEURISTICS_COMBINATORYSOLUTION_H
 #define METAHEURISTICS_COMBINATORYSOLUTION_H
 
+#include <algorithm>
 #include "Solution.hpp"
 
 template<typename T>
@@ -17,6 +18,16 @@ public:
      * @param arr : array solution
      */
     CombinatorySolution(int s) : Solution<T>(s){
+
+        fillRandomSolution();
+    }
+
+    /**
+    * Method used for define a suit of int randomly distributed
+    * @param this->size : number of element into array solution
+    *
+    */
+    void fillRandomSolution() {
 
         for (int i = 0; i < this->size; ++i) {
             this->arr[i] = i;
@@ -98,7 +109,7 @@ public:
      *
      * @return bool
      */
-    Solution<T>* CombinatorySolution::crossover(C *sol) {
+    Solution<T>* crossover(Solution<T>* sol) {
 
         // Method which generates two solutions and selected one randomly
 
@@ -110,24 +121,24 @@ public:
         /***************************************************************/
 
         // Setting child solutions
-        C* fstChild = C::copy(this);
-        C* sndChild = C::copy(sol);
+        CombinatorySolution<T>* fstChild = CombinatorySolution<T>::copy(this);
+        CombinatorySolution<T>* sndChild = CombinatorySolution<T>::copy((CombinatorySolution<T> *) sol);
 
         // Finding crossing region (avoiding array out of bounds)
         int fstRegion = (rand() % (this->size-1)+1);
         int sndRegion = (rand() % (this->size-1)+1);
 
         // Getting region values
-        std::pair<int, int> fstRegionVal (this->getArr(fstRegion-1), this->getArr(fstRegion));
-        std::pair<int, int> sndRegionVal (sol->getArr(sndRegion-1), sol->getArr(sndRegion));
+        std::pair<T, T> fstRegionVal (this->getArr(fstRegion-1), this->getArr(fstRegion));
+        std::pair<T, T> sndRegionVal (sol->getArr(sndRegion-1), sol->getArr(sndRegion));
 
         // Grouping regions value
-        auto regionsValue = vector<pair<int, int>>();
+        auto regionsValue = vector<pair<T, T>>();
         regionsValue.push_back(fstRegionVal);
         regionsValue.push_back(sndRegionVal);
 
         // Grouping child solution
-        auto children = vector<C*>();
+        auto children = vector<CombinatorySolution<T>*>();
         children.push_back(fstChild);
         children.push_back(sndChild);
 
@@ -137,13 +148,13 @@ public:
             for(auto child : children){
 
                 // Retrieve index of region value
-                int fstIndex = std::distance(child, std::find(child, child + this->size, region.first));
-                int sndIndex = std::distance(child, std::find(child, child + this->size, region.second));
+                int fstIndex = std::distance(child->getArr(), std::find(child->getArr(), child->getArr() + this->size, region.first));
+                int sndIndex = std::distance(child->getArr(), std::find(child->getArr(), child->getArr() + this->size, region.second));
 
                 // Swap values
                 int tempVal = child->getArr(fstIndex);
-                child->getArr(fstIndex) = child->getArr(sndIndex);
-                child->getArr(sndIndex) = tempVal;
+                child->setArr(fstIndex, child->getArr(sndIndex));
+                child->setArr(sndIndex, tempVal);
             }
         }
 
