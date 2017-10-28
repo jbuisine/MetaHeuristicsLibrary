@@ -16,6 +16,10 @@ class EvolutionaryAlgorithmSearch : public Heuristics<C> {
 // Type Operator used for generate new solution
 typedef C* (Operator)(C* fstSol, C* sndSol);
 
+
+// Type Selector used for getting children list
+typedef std::vector<C*> (Selector)(std::vector<C*> mu, int lambda);
+
 // Type Local search function type
 typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
 
