@@ -18,7 +18,7 @@ typedef C* (Operator)(C* fstSol, C* sndSol);
 
 
 // Type Selector used for getting children list
-typedef std::vector<C*> (Selector)(std::vector<C*> mu, int lambda);
+typedef std::vector<int>* (Selector)(std::vector<double>* muScores, int lambda);
 
 // Type Local search function type
 typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
@@ -43,7 +43,7 @@ public:
      * @param nbIterationLocal : Iteration for Local search
      * @return
      */
-    C* runSimple(int mu, int lambda, int iteration, Operator crossover, Operator mutation, Local localSearch, int nbIterationLocal){
+    C* runSimple(int mu, int lambda, int iteration, Selector selector, Operator crossover, Operator mutation, Local localSearch, int nbIterationLocal){
 
 
         /***********************************************/
@@ -99,13 +99,7 @@ public:
             auto childrenScores = new std::vector<double>(lambda);
 
             // By default getting lambda best parents solutions indexes
-            auto muIndexes = new std::vector<int>(parentsScores->size());
-
-            for( int j = 0; j < muIndexes->size(); ++j ){
-                muIndexes->at(j) = j;
-            }
-
-            std::partial_sort(muIndexes->begin(), muIndexes->begin()+lambda, muIndexes->end(), Utils::Comp(parentsScores));
+            auto muIndexes = selector(parentsScores, lambda);
 
             // Initialisation of child solutions
             for(int j(0); j < lambda; j++){
