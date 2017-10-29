@@ -191,6 +191,7 @@ void mainEASimple() {
     BinaryCombinatorySolution<int>* s = ea->runSimple(MU_ELEMENT,
                                                       LAMBDA_ELEMENT,
                                                       NB_ITERATION,
+                                                      EASelectors<BinaryCombinatorySolution<int>>::simpleSelector,
                                                       EAOperators<BinaryCombinatorySolution<int>>::simpleCrossover,
                                                       EAOperators<BinaryCombinatorySolution<int>>::simpleMutation,
                                                       LocalSearch<BinaryCombinatorySolution<int>>::hillClimberFirstImprovement,

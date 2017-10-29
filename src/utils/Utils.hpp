@@ -25,6 +25,9 @@ public:
         return i0 + (i1 - i0) * rand() / ((double) RAND_MAX);
     }
 
+    /**
+     * Struct used to compare values of double vector
+     */
     struct Comp{
         Comp(vector<double>* v ) : _v(v) {}
         bool operator ()(double a, double b) { return _v->at(a) > _v->at(b); }
