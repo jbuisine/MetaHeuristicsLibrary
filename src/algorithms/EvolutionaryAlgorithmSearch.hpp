@@ -7,7 +7,7 @@
 
 
 #include "Heuristics.hpp"
-#include "operators/EAOperators.hpp"
+#include "eaUtils/Operators.hpp"
 
 template<typename C>
 class EvolutionaryAlgorithmSearch : public Heuristics<C> {
@@ -18,7 +18,7 @@ typedef C* (Operator)(C* fstSol, C* sndSol);
 
 
 // Type Selector used for getting children list
-typedef std::vector<int>* (Selector)(std::vector<double>* muScores, int lambda);
+typedef std::vector<int> (Selector)(std::vector<double>* muScores, int lambda);
 
 // Type Local search function type
 typedef C* (Local)(int nbEvaluation, Heuristics<C> *heuristics, C* s);
@@ -39,11 +39,15 @@ public:
      * @param mu : Number of parents solutions
      * @param lambda : Number of children solutions
      * @param iteration : Number of iterations
+     * @param childrenSelector : children selector function
+     * @param generationSelector : selector function used for getting indexes to create next generation
+     * @param crossover : crossover Operator
+     * @param mutation : mutation Operator
      * @param localSearch : Local search expected (Local type)
      * @param nbIterationLocal : Iteration for Local search
      * @return
      */
-    C* runSimple(int mu, int lambda, int iteration, Selector selector, Operator crossover, Operator mutation, Local localSearch, int nbIterationLocal){
+    C* runSimple(int mu, int lambda, int iteration, Selector childrenSelector, Selector generationSelector, Operator crossover, Operator mutation, Local localSearch, int nbIterationLocal){
 
 
         /***********************************************/
@@ -98,14 +102,14 @@ public:
             auto children = new std::vector<C*>(lambda);
             auto childrenScores = new std::vector<double>(lambda);
 
-            // By default getting lambda best parents solutions indexes
-            auto muIndexes = selector(parentsScores, lambda);
+            // getting selected parent indexes to create new generation
+            auto muIndexes = childrenSelector(parentsScores, lambda);
 
             // Initialisation of child solutions
             for(int j(0); j < lambda; j++){
 
-                children->at(j) = C::copy(parents->at(muIndexes->at(j)));
-                childrenScores->at(j) = parentsScores->at(muIndexes->at(j));
+                children->at(j) = C::copy(parents->at(muIndexes.at(j)));
+                childrenScores->at(j) = parentsScores->at(muIndexes.at(j));
             }
 
             /******************************************************************************************/
@@ -147,20 +151,14 @@ public:
             populationScores->insert(populationScores->end(), parentsScores->begin(), parentsScores->end());
             populationScores->insert(populationScores->end(), childrenScores->begin(), childrenScores->end());
 
-            // By default getting best mu solution indexes   of population
-            auto populationIndexes = new std::vector<int>(populationScores->size());
+            // getting selected parent indexes to create new generation
+            auto populationIndexes = generationSelector(populationScores, mu);
 
-            for( int j = 0; j < populationIndexes->size(); ++j ){
-                populationIndexes->at(j) = j;
-            }
-
-            partial_sort(populationIndexes->begin(), populationIndexes->begin()+mu, populationIndexes->end(), Utils::Comp(populationScores));
-
-            // Setting best population (mu+lambda) solutions to generate new parents (mu) population
+            // Setting new generation solutions based on selected indexes
             for(int j(0); j < mu; j++){
 
-                parents->at(j) = population->at(populationIndexes->at(j));
-                parentsScores->at(j) = populationScores->at(populationIndexes->at(j));
+                parents->at(j) = population->at(populationIndexes.at(j));
+                parentsScores->at(j) = populationScores->at(populationIndexes.at(j));
             }
 
             ///////////////////////////////
@@ -168,9 +166,6 @@ public:
             ///////////////////////////////
             delete children, population;
             delete childrenScores, populationScores;
-
-            // delete indexes..
-            delete populationIndexes, muIndexes;
 
             std::cout << "EA Simple " << ((double)i*100.0)/iteration << "%" << std::endl;
         }

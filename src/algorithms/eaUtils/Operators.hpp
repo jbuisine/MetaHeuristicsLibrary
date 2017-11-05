@@ -6,7 +6,7 @@
 #define METAHEURISTICS_EAOPERATORS_HPP
 
 template <typename C>
-class EAOperators {
+class Operators {
 
 public:
     /**
