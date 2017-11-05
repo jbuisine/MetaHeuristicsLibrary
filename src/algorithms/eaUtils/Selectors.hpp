@@ -8,7 +8,7 @@
 #include <vector>
 
 template <typename C>
-class EASelectors {
+class Selectors {
 
 public:
 
@@ -17,23 +17,23 @@ public:
      *
      * Selector is based on score, only best solution remains (high pressure selection)
      *
-     * @param muScore : list which is the population
-     * @param lambda : number of children expected
+     * @param scores : list which is the population
+     * @param nb : number of children expected
      * @return indexes selected from mu population
      */
-    static std::vector<int>* simpleSelector(std::vector<double>* muScores, int lambda){
+    static std::vector<int> simpleSelector(std::vector<double>* scores, int nb){
 
         // By default getting lambda best parents solutions indexes
-        auto muIndexes = new std::vector<int>(muScores->size());
+        auto indexes = std::vector<int>(scores->size());
 
-        for( int j = 0; j < muIndexes->size(); j++){
-            muIndexes->at(j) = j;
+        for( int j = 0; j < indexes.size(); j++){
+            indexes.at(j) = j;
         }
 
-        // Ordering children indexes by value
-        std::partial_sort(muIndexes->begin(), muIndexes->begin()+lambda, muIndexes->end(), Utils::Comp(muScores));
+        // Default ordering indexes by value
+        std::partial_sort(indexes.begin(), indexes.begin()+nb, indexes.end(), Utils::Comp(scores));
 
-        return muIndexes;
+        return std::vector<int>(indexes.begin(), indexes.begin()+nb);
     }
 };
 

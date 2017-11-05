@@ -14,7 +14,7 @@
 
 // EA algorithms
 #include "algorithms/EvolutionaryAlgorithmSearch.hpp"
-#include "algorithms/operators/EASelectors.hpp"
-#include "algorithms/operators/EAOperators.hpp"
+#include "algorithms/eaUtils/Selectors.hpp"
+#include "algorithms/eaUtils/Operators.hpp"
 
 #endif //METAHEURISTICS_METAHEURISTICS_H

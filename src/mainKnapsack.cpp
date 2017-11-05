@@ -191,10 +191,11 @@ void mainEASimple() {
     BinaryCombinatorySolution<int>* s = ea->runSimple(MU_ELEMENT,
                                                       LAMBDA_ELEMENT,
                                                       NB_ITERATION,
-                                                      EASelectors<BinaryCombinatorySolution<int>>::simpleSelector,
-                                                      EAOperators<BinaryCombinatorySolution<int>>::simpleCrossover,
-                                                      EAOperators<BinaryCombinatorySolution<int>>::simpleMutation,
-                                                      LocalSearch<BinaryCombinatorySolution<int>>::hillClimberFirstImprovement,
+                                                      Selectors<BinaryCombinatorySolution<int>>::simpleSelector,
+                                                      Selectors<BinaryCombinatorySolution<int>>::simpleSelector,
+                                                      Operators<BinaryCombinatorySolution<int>>::simpleCrossover,
+                                                      Operators<BinaryCombinatorySolution<int>>::simpleMutation,
+                                                      LocalSearch<BinaryCombinatorySolution<int>>::hillClimberBestImprovement,
                                                       NB_LOCAL_ITERATION);
 
     cout << "Best solution found so far for EA simple search : ";
